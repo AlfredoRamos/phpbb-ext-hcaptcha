@@ -1,0 +1,16 @@
+services:
+    alfredoramos.hcaptcha.captcha.hcaptcha:
+        class: alfredoramos\hcaptcha\captcha\plugins\hcaptcha
+        arguments:
+            - '@config'
+            - '@user'
+            - '@request'
+            - '@template'
+            - '@language'
+            - '@log'
+            - '%core.root_path%'
+            - '%core.php_ext%'
+        calls:
+            - ['set_name', ['alfredoramos.hcaptcha.captcha.hcaptcha']]
+        tags:
+            - { name: captcha.plugins }

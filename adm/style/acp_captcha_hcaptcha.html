@@ -1,0 +1,64 @@
+{% include 'overall_header.html' %}
+
+<a id="maincontent"></a>
+
+<h1>{{ lang('ACP_VC_SETTINGS') }}</h1>
+<p>{{ lang('ACP_VC_SETTINGS_EXPLAIN') }}</p>
+
+<form id="acp_captcha" method="post" action="{{ U_ACTION }}">
+	<fieldset>
+		<legend>{{ lang('GENERAL_OPTIONS') }}</legend>
+
+		<dl>
+			<dt>
+				<label for="hcaptcha_key">{{ lang('HCAPTCHA_KEY') ~ lang('COLON') }}</label>
+				<br><span>{{ lang('HCAPTCHA_KEY_EXPLAIN') }}</span>
+			</dt>
+			<dd>
+				<input type="text" id="hcaptcha_key" name="hcaptcha_key" value="{{ HCAPTCHA_KEY }}" required="required" autocomplete="off" class="medium">
+			</dd>
+		</dl>
+
+		<dl>
+			<dt>
+				<label for="hcaptcha_secret">{{ lang('HCAPTCHA_SECRET') ~ lang('COLON') }}</label>
+				<br><span>{{ lang('HCAPTCHA_SECRET_EXPLAIN') }}</span>
+			</dt>
+			<dd>
+				<input type="password" id="hcaptcha_secret" name="hcaptcha_secret" value="{{ HCAPTCHA_SECRET }}" required="required" autocomplete="off" class="medium">
+				<span id="toggle-hcaptcha-secret" title="{{ lang('ACP_HCAPTCHA_TOGGLE_SECRET')|striptags|escape }}">
+					<i class="icon fa-lg fa-eye" aria-hidden="true"></i>
+				</span>
+			</dd>
+		</dl>
+	</fieldset>
+
+	<fieldset>
+		<legend>{{ lang('PREVIEW') }}</legend>
+
+		{% if PREVIEW %}
+			<div class="successbox">
+				<h3>{{ lang('WARNING') }}</h3>
+				<p>{{ lang('CAPTCHA_PREVIEW_MSG') }}</p>
+			</div>
+		{% endif %}
+
+		{% include CAPTCHA_PREVIEW %}
+	</fieldset>
+
+	<fieldset>
+		<legend>{{ lang('ACP_SUBMIT_CHANGES') }}</legend>
+
+		<p class="submit-buttons">
+			<input class="button1" id="submit" name="submit" type="submit" value="{{ lang('SUBMIT') }}">
+			<input class="button2" id="reset" name="reset" type="reset" value="{{ lang('RESET') }}">
+
+			<input name="select_captcha" type="hidden" value="{{ CAPTCHA_NAME }}">
+			<input name="configure" type="hidden" value="1">
+			{{ S_FORM_TOKEN }}
+		</p>
+	</fieldset>
+</form>
+</form>
+
+{% include 'overall_footer.html' %}

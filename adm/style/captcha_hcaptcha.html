@@ -1,0 +1,14 @@
+{% if S_HCAPTCHA_AVAILABLE %}
+	<dl>
+		<dt>&nbsp;</dt>
+		<dd>
+			<noscript>
+				<div class="warningbox">{{ lang('HCAPTCHA_NOSCRIPT') }}</div>
+			</noscript>
+			<script src="{{ U_HCAPTCHA_SCRIPT }}" async defer></script>
+			<div class="h-captcha" data-sitekey="{{ HCAPTCHA_KEY }}"></div>
+		</dd>
+	</dl>
+{% else %}
+	{{ lang('HCAPTCHA_NOT_AVAILABLE') }}
+{% endif %}
