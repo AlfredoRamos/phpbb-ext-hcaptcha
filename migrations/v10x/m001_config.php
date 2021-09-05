@@ -23,7 +23,15 @@ class m001_config extends migration
 			[
 				'config.add',
 				['hcaptcha_secret', '']
-			]
+			],
+			[
+				'config.add',
+				['hcaptcha_theme', '']
+			],
+			[
+				'config.add',
+				['hcaptcha_size', '']
+			],
 		];
 	}
 }

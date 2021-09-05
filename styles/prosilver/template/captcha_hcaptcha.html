@@ -1,9 +1,15 @@
-{% if S_HCAPTCHA_AVAILABLE %}
-<noscript>
-	<div class="warningbox">{{ lang('HCAPTCHA_NOSCRIPT') }}</div>
-</noscript>
-<script src="{{ U_HCAPTCHA_SCRIPT }}" async defer></script>
-<div class="h-captcha" data-sitekey="{{ HCAPTCHA_KEY }}"></div>
-{% else %}
-{{ lang('HCAPTCHA_NOT_AVAILABLE') }}
-{% endif %}
+<div class="hcaptcha-panel panel">
+	<div class="inner">
+		{% if S_HCAPTCHA_AVAILABLE %}
+		<noscript>
+			<div class="hcaptcha-error rules error" style="text-align: center;">{{ lang('HCAPTCHA_NOSCRIPT') }}</div>
+		</noscript>
+		<fieldset class="fields2">
+			<script src="{{ U_HCAPTCHA_SCRIPT }}" async defer></script>
+			<div class="h-captcha" data-sitekey="{{ HCAPTCHA_KEY }}" style="text-align: center;"></div>
+		</fieldset>
+		{% else %}
+			{{ lang('HCAPTCHA_NOT_AVAILABLE') }}
+		{% endif %}
+	</div>
+</div>

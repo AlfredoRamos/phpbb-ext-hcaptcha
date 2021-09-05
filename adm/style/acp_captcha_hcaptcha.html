@@ -4,6 +4,15 @@
 
 <h1>{{ lang('ACP_VC_SETTINGS') }}</h1>
 <p>{{ lang('ACP_VC_SETTINGS_EXPLAIN') }}</p>
+<p>{{ lang('CAPTCHA_HCAPTCHA_EXPLAIN') }}</p>
+
+{% if VALIDATION_ERRORS %}
+<div class="errorbox">
+	{% for ERROR in VALIDATION_ERRORS %}
+	<p>{{ ERROR.MESSAGE }}</p>
+	{% endfor %}
+</div>
+{% endif %}
 
 <form id="acp_captcha" method="post" action="{{ U_ACTION }}">
 	<fieldset>
@@ -18,7 +27,6 @@
 				<input type="text" id="hcaptcha_key" name="hcaptcha_key" value="{{ HCAPTCHA_KEY }}" required="required" autocomplete="off" class="medium">
 			</dd>
 		</dl>
-
 		<dl>
 			<dt>
 				<label for="hcaptcha_secret">{{ lang('HCAPTCHA_SECRET') ~ lang('COLON') }}</label>
@@ -31,6 +39,36 @@
 				</span>
 			</dd>
 		</dl>
+		{% if HCAPTCHA_THEMES %}
+		<dl>
+			<dt>
+				<label for="hcaptcha_theme">{{ lang('HCAPTCHA_THEME') ~ lang('COLON') }}</label>
+				<br><span>{{ lang('HCAPTCHA_THEME_EXPLAIN') }}</span>
+			</dt>
+			<dd>
+				<select id="hcaptcha_theme" name="hcaptcha_theme">
+					{% for THEME in HCAPTCHA_THEMES %}
+					<option value="{{ THEME.KEY }}"{% if THEME.ENABLED or (not THEME.ENABLED and loop.first) %} selected{% endif %}>{{ THEME.NAME }}</option>
+					{% endfor %}
+				</select>
+			</dd>
+		</dl>
+		{% endif %}
+		{% if HCAPTCHA_SIZES %}
+		<dl>
+			<dt>
+				<label for="hcaptcha_size">{{ lang('HCAPTCHA_SIZE') ~ lang('COLON') }}</label>
+				<br><span>{{ lang('HCAPTCHA_SIZE_EXPLAIN') }}</span>
+			</dt>
+			<dd>
+				<select id="hcaptcha_size" name="hcaptcha_size">
+					{% for SIZE in HCAPTCHA_SIZES %}
+					<option value="{{ SIZE.KEY }}"{% if SIZE.ENABLED or (not SIZE.ENABLED and loop.first) %} selected{% endif %}>{{ SIZE.NAME }}</option>
+					{% endfor %}
+				</select>
+			</dd>
+		</dl>
+		{% endif %}
 	</fieldset>
 
 	<fieldset>

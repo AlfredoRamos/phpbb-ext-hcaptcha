@@ -1,4 +1,9 @@
 services:
+    alfredoramos.hcaptcha.helper:
+        class: alfredoramos\hcaptcha\includes\helper
+        arguments:
+            - '@language'
+
     alfredoramos.hcaptcha.captcha.hcaptcha:
         class: alfredoramos\hcaptcha\captcha\plugins\hcaptcha
         arguments:
@@ -8,6 +13,7 @@ services:
             - '@template'
             - '@language'
             - '@log'
+            - '@alfredoramos.hcaptcha.helper'
             - '%core.root_path%'
             - '%core.php_ext%'
         calls:

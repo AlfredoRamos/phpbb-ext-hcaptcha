@@ -3,7 +3,7 @@
 	"type": "phpbb-extension",
 	"description": "hCaptcha extension for phpBB",
 	"homepage": "https://github.com/AlfredoRamos/phpbb-ext-hcaptcha",
-	"version": "1.4.0",
+	"version": "0.1.0-beta",
 	"time": "2020-11-06",
 	"keywords": ["phpbb", "extension", "hcatpcha"],
 	"license": "GPL-2.0-only",
