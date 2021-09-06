@@ -27,7 +27,8 @@ class ext extends base
 	{
 		$parent_state = parent::enable_step($old_state);
 
-		if ($parent_state === false) {
+		if ($parent_state === false)
+		{
 			$this->handle_hcaptcha('enable');
 		}
 
@@ -72,7 +73,8 @@ class ext extends base
 		$hcaptcha_service = 'alfredoramos.hcaptcha.captcha.hcaptcha';
 		$selected_key = 'hcaptcha_selected';
 
-		switch ($step) {
+		switch ($step)
+		{
 			case 'enable':
 				if (!empty($config[$selected_key]))
 				{

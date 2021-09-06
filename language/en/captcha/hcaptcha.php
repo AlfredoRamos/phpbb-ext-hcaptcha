@@ -10,10 +10,10 @@
  /**
   * @ignore
   */
- if (!defined('IN_PHPBB'))
- {
- 	exit;
- }
+if (!defined('IN_PHPBB'))
+{
+	exit;
+}
 
  /**
  * @ignore
