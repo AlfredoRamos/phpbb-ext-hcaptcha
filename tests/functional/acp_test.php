@@ -14,10 +14,14 @@ namespace alfredoramos\hcaptcha\tests\functional;
  */
 class acp_test extends \phpbb_functional_test_case
 {
-	use functional_test_case_trait;
-
-	protected function init()
+	static protected function setup_extensions()
 	{
+		return ['alfredoramos/hcaptcha'];
+	}
+
+	protected function setUp(): void
+	{
+		parent::setUp();
 		$this->add_lang_ext('alfredoramos/hcaptcha', 'captcha/hcaptcha');
 		$this->login();
 		$this->admin_login();
@@ -30,12 +34,22 @@ class acp_test extends \phpbb_functional_test_case
 			$this->sid
 		));
 
-		$form = $crawler->selectButton($this->lang('SUBMIT'))->form();
+		$form = $crawler->selectButton('configure')->form();
 		$this->assertTrue($form->has('select_captcha'));
 		$this->assertContains(
 			'alfredoramos.hcaptcha.captcha.hcaptcha',
 			$form->get('select_captcha')->availableOptionValues()
 		);
+
+		$form->get('select_captcha')->select('alfredoramos.hcaptcha.captcha.hcaptcha');
+
+		$crawler = self::submit($form);
+
+		$form = $crawler->selectButton('submit')->form();
+		$this->assertTrue($form->has('hcaptcha_key'));
+		$this->assertTrue($form->has('hcaptcha_secret'));
+		$this->assertTrue($form->has('hcaptcha_theme'));
+		$this->assertTrue($form->has('hcaptcha_size'));
 
 		/*
 		$container = $crawler->filter('.h-captcha');
