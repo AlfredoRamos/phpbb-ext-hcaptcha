@@ -92,8 +92,8 @@ class hcaptcha extends captcha_abstract
 		add_form_key($form_key);
 
 		$allowed = [
-			'themes'	=> ['light', 'dark'],
-			'sizes'	=> ['normal', 'compact']
+			'theme'	=> ['light', 'dark'],
+			'size'	=> ['normal', 'compact']
 		];
 
 		$errors = [];
@@ -114,13 +114,13 @@ class hcaptcha extends captcha_abstract
 			'hcaptcha_theme' => [
 				'filter' => FILTER_VALIDATE_REGEXP,
 				'options' => [
-					'regexp' => '#^(?:' . implode('|', $allowed['themes']) . ')?$#'
+					'regexp' => '#^(?:' . implode('|', $allowed['theme']) . ')?$#'
 				]
 			],
 			'hcaptcha_size' => [
 				'filter' => FILTER_VALIDATE_REGEXP,
 				'options' => [
-					'regexp' => '#^(?:' . implode('|', $allowed['sizes']) . ')?$#'
+					'regexp' => '#^(?:' . implode('|', $allowed['size']) . ')?$#'
 				]
 			]
 		];
@@ -168,12 +168,14 @@ class hcaptcha extends captcha_abstract
 			'CAPTCHA_PREVIEW'	=> $this->get_demo_template($id),
 
 			'HCAPTCHA_KEY'		=> $this->config['hcaptcha_key'],
-			'HCAPTCHA_SECRET'	=> $this->config['hcaptcha_secret']
+			'HCAPTCHA_SECRET'	=> $this->config['hcaptcha_secret'],
+
+			'S_HCAPTCHA_SETTINGS' => true
 		]);
 
 		foreach ($allowed as $key => $value)
 		{
-			$block_var = sprintf('HCAPTCHA_%s', strtoupper($key));
+			$block_var = sprintf('HCAPTCHA_%s_LIST', strtoupper($key));
 
 			foreach ($value as $val)
 			{
@@ -184,7 +186,7 @@ class hcaptcha extends captcha_abstract
 						strtoupper($key),
 						strtoupper($val)
 					)),
-					'ENABLED' => ($this->config['hcaptcha_theme'] === $val)
+					'ENABLED' => ($this->config[sprintf('hcaptcha_%s', $key)] === $val)
 				]);
 			}
 		}
@@ -221,6 +223,8 @@ class hcaptcha extends captcha_abstract
 			'CONFIRM_EXPLAIN'		=> $this->language->lang($explain, '<a href="' . $contact . '">', '</a>'),
 
 			'HCAPTCHA_KEY'			=> $this->config['hcaptcha_key'],
+			'HCAPTCHA_THEME'		=> $this->config['hcaptcha_theme'],
+			'HCAPTCHA_SIZE'			=> $this->config['hcaptcha_size'],
 			'U_HCAPTCHA_SCRIPT'		=> 'https://js.hcaptcha.com/1/api.js',
 			'S_HCAPTCHA_AVAILABLE'	=> $this->is_available(),
 

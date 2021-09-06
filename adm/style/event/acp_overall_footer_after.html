@@ -1,0 +1,4 @@
+{% if S_HCAPTCHA_SETTINGS and not INCLUDED_HCAPTCHA_ACP_JS %}
+{% INCLUDEJS '@alfredoramos_hcaptcha/js/settings.js' %}
+{%- set INCLUDED_HCAPTCHA_ACP_JS = true -%}
+{% endif %}

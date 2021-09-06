@@ -6,7 +6,7 @@
 				<div class="warningbox">{{ lang('HCAPTCHA_NOSCRIPT') }}</div>
 			</noscript>
 			<script src="{{ U_HCAPTCHA_SCRIPT }}" async defer></script>
-			<div class="h-captcha" data-sitekey="{{ HCAPTCHA_KEY }}"></div>
+			<div class="h-captcha" data-sitekey="{{ HCAPTCHA_KEY }}"{% if HCAPTCHA_THEME %} data-theme="{{ HCAPTCHA_THEME }}"{% endif %}{% if HCAPTCHA_SIZE %} data-size="{{ HCAPTCHA_SIZE }}"{% endif %}></div>
 		</dd>
 	</dl>
 {% else %}
