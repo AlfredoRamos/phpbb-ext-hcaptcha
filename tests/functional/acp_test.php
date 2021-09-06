@@ -46,10 +46,26 @@ class acp_test extends \phpbb_functional_test_case
 		$crawler = self::submit($form);
 
 		$form = $crawler->selectButton('submit')->form();
+
 		$this->assertTrue($form->has('hcaptcha_key'));
+		$this->assertSame('', $form->get('hcaptcha_key')->getValue());
+
 		$this->assertTrue($form->has('hcaptcha_secret'));
+		$this->assertSame('', $form->get('hcaptcha_secret')->getValue());
+
 		$this->assertTrue($form->has('hcaptcha_theme'));
+		$this->assertSame('light', $form->get('hcaptcha_theme')->getValue());
+		$this->assertSame(
+			['light', 'dark'],
+			$form->get('hcaptcha_theme')->availableOptionValues()
+		);
+
 		$this->assertTrue($form->has('hcaptcha_size'));
+		$this->assertSame('normal', $form->get('hcaptcha_size')->getValue());
+		$this->assertSame(
+			['normal', 'compact'],
+			$form->get('hcaptcha_size')->availableOptionValues()
+		);
 
 		/*
 		$container = $crawler->filter('.h-captcha');
