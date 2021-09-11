@@ -21,12 +21,14 @@ trait functional_test_case_trait
 		$db = $this->get_db();
 		$db->sql_transaction('begin');
 
-		$hcaptcha = [
+		$config_ary = [
+			// hCaptcha
+			'captcha_plugin' => 'alfredoramos.hcaptcha.captcha.hcaptcha',
 			'hcaptcha_key' => '10000000-ffff-ffff-ffff-000000000001',
 			'hcaptcha_secret' => '0x0000000000000000000000000000000000000000'
 		];
 
-		foreach ($hcaptcha as $key => $value)
+		foreach ($config_ary as $key => $value)
 		{
 			$key = trim($key);
 			$value = trim($value);

@@ -22,7 +22,6 @@ class acp_test extends \phpbb_functional_test_case
 		$this->add_lang_ext('alfredoramos/hcaptcha', 'captcha/hcaptcha');
 		$this->login();
 		$this->admin_login();
-		$this->init_hcaptcha();
 	}
 
 	public function test_plugin_option()
