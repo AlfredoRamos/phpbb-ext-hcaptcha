@@ -14,10 +14,7 @@ namespace alfredoramos\hcaptcha\tests\functional;
  */
 class acp_test extends \phpbb_functional_test_case
 {
-	static protected function setup_extensions()
-	{
-		return ['alfredoramos/hcaptcha'];
-	}
+	use functional_test_case_trait;
 
 	protected function setUp(): void
 	{
@@ -25,6 +22,7 @@ class acp_test extends \phpbb_functional_test_case
 		$this->add_lang_ext('alfredoramos/hcaptcha', 'captcha/hcaptcha');
 		$this->login();
 		$this->admin_login();
+		$this->init_hcaptcha();
 	}
 
 	public function test_plugin_option()
@@ -67,33 +65,54 @@ class acp_test extends \phpbb_functional_test_case
 			$form->get('hcaptcha_size')->availableOptionValues()
 		);
 
-		/*
-		$container = $crawler->filter('.h-captcha');
-		$this->assertSame(1, $container->count());
+		$crawler = self::submit($form, [
+			'hcaptcha_key' => '10000000-ffff-ffff-ffff-000000000001',
+			'hcaptcha_secret' => '0x0000000000000000000000000000000000000000'
+		]);
+
+		$this->assertSame(1, $crawler->filter('.successbox')->count());
+
+		$crawler = self::request('GET', sprintf(
+			'adm/index.php?i=acp_captcha&mode=visual&sid=%s&',
+			$this->sid
+		));
+
+		$form = $crawler->selectButton('main_submit')->form();
+		$form->get('select_captcha')->select('alfredoramos.hcaptcha.captcha.hcaptcha');
+		self::submit($form);
+
+		$crawler = self::request('GET', sprintf(
+			'adm/index.php?i=acp_captcha&mode=visual&sid=%s&',
+			$this->sid
+		));
+
+		$widget = $crawler->filter('.h-captcha');
+		$this->assertSame(1, $widget->count());
 		$this->assertSame(
 			'10000000-ffff-ffff-ffff-000000000001',
-			$container->attr('data-sitekey')
+			$widget->attr('data-sitekey')
 		);
 		$this->assertSame(
 			1,
 			preg_match(
 				'#^[a-f0-9]{8}\-[a-f0-9]{4}\-[a-f0-9]{4}\-[a-f0-9]{4}\-[a-f0-9]{12}$#',
-				$container->attr('data-sitekey')
+				$widget->attr('data-sitekey')
 			)
 		);
 
-		$script = $container->closest('dd')->filter('script');
+		$container = $crawler->filterXPath('//div[contains(@class, "h-captcha")]/parent::*');
+
+		$script = $container->filter('script');
 		$this->assertSame(1, $script->count());
 		$this->assertSame('https://js.hcaptcha.com/1/api.js', $script->attr('src'));
-		$this->assertFalse(empty($script->attr('async')));
-		$this->assertFalse(empty($script->attr('defer')));
+		$this->assertSame('', $script->attr('async'));
+		$this->assertSame('defer', $script->attr('defer'));
 
-		$noscript = $container->closest('dd')->filter('noscript');
+		$noscript = $container->filter('noscript');
 		$this->assertSame(1, $noscript->count());
 		$this->assertSame(
 			$this->lang('HCAPTCHA_NOSCRIPT'),
 			$noscript->filter('div')->text()
 		);
-		*/
 	}
 }
