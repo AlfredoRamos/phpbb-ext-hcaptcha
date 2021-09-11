@@ -132,14 +132,6 @@
 			checkreturn="true"
 			outputProperty='package-version' />
 
-		<!-- Build and ninify assets -->
-		<if>
-			<equals arg1="${env}" arg2="production" />
-			<then>
-				<phingcall target="minify-assets" />
-			</then>
-		</if>
-
 		<phingcall target="wrap-package">
 			<property name="destination-filename" value="${build-directory}/upload/${vendor-name}_${extension-name}_${package-version}" />
 		</phingcall>
