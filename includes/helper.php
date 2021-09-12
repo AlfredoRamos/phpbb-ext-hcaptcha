@@ -13,6 +13,16 @@ use phpbb\language\language;
 
 class helper
 {
+	/** @var language */
+	protected $language;
+
+	/**
+	 * Helper constructor.
+	 *
+	 * @param language $language
+	 *
+	 * @param void
+	 */
 	public function __construct(language $language)
 	{
 		$this->language = $language;

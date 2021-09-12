@@ -41,6 +41,7 @@ $lang = array_merge($lang, [
 	'HCAPTCHA_NOT_AVAILABLE' => 'In order to use hCaptcha, you must create an account on <a href="https://www.hcaptcha.com/" rel="external nofollow noreferrer noopener" target="_blank">www.hcaptcha.com</a>.',
 	'HCAPTCHA_INCORRECT' => 'The solution you provided was incorrect.',
 	'HCAPTCHA_NOSCRIPT' => 'Please enable JavaScript in your browser to load the challenge.',
+	'HCAPTCHA_LOGIN_ERROR_ATTEMPTS' => 'You have exceeded the maximum number of login attempts allowed.<br>In addition to your username and password, hCaptcha will be used to authenticate your session.',
 	'HCAPTCHA_REQUEST_EXCEPTION' => 'hCaptcha request error: %s',
 
 	'ACP_HCAPTCHA_TOGGLE_SECRET' => 'Toggle %s',
