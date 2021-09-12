@@ -22,16 +22,48 @@ use GuzzleHttp\Exception\GuzzleException;
 
 class hcaptcha extends captcha_abstract
 {
+	/** @var config */
 	protected $config;
+
+	/** @var user */
 	protected $user;
+
+	/** @var request */
 	protected $request;
+
+	/** @var template */
 	protected $template;
+
+	/** @var language */
 	protected $language;
+
+	/** @var log */
 	protected $log;
+
+	/** @var helper */
 	protected $helper;
+
+	/** @var string */
 	protected $root_path;
+
+	/** @var string */
 	protected $php_ext;
 
+	/**
+	 * Constructor of hCaptcha plugin.
+	 *
+	 * @param config	$config
+	 * @param user		$user
+	 * @param request	$request
+	 * @param template	$template
+	 * @param language	$language
+	 * @param log		$log
+	 * @param helper	$helper
+	 * @param string	$root_path
+	 * @param string	$php_ext
+	 *
+	 * @return void
+	 */
 	public function __construct(config $config, user $user, request $request, template $template, language $language, log $log, helper $helper, $root_path, $php_ext)
 	{
 		$this->config = $config;
@@ -45,35 +77,74 @@ class hcaptcha extends captcha_abstract
 		$this->php_ext = $php_ext;
 	}
 
-	public function execute()
-	{
-	}
-
-	public function execute_demo()
-	{
-	}
-
-	public function get_generator_class()
-	{
-		throw new \Exception('No generator class given.');
-	}
-
-	public function get_name()
-	{
-		return 'CAPTCHA_HCAPTCHA';
-	}
-
-	public function has_config()
-	{
-		return true;
-	}
-
+	/**
+	 * Initialize this CAPTCHA plugin.
+	 *
+	 * @param integer $type
+	 *
+	 * @return void
+	 */
 	public function init($type)
 	{
 		$this->language->add_lang('captcha/hcaptcha', 'alfredoramos/hcaptcha');
 		parent::init($type);
 	}
 
+	/**
+	 * Not needed.
+	 *
+	 * @return void
+	 */
+	public function execute()
+	{
+	}
+
+	/**
+	 * Not needed.
+	 *
+	 * @return void
+	 */
+	public function execute_demo()
+	{
+	}
+
+	/**
+	 * Not needed.
+	 *
+	 * @throws \Exception
+	 *
+	 * @return void
+	 */
+	public function get_generator_class()
+	{
+		throw new \Exception('No generator class given.');
+	}
+
+	/**
+	 * Get CAPTCHA plugin name.
+	 *
+	 * @return string
+	 */
+	public function get_name()
+	{
+		return 'CAPTCHA_HCAPTCHA';
+	}
+
+	/**
+	 * Indicator that this CAPTCHA plugin requires configuration.
+	 *
+	 * @return bool
+	 */
+	public function has_config()
+	{
+		return true;
+	}
+
+	/**
+	 * Whether or not this CAPTCHA plugin is available and setup.
+	 *
+	 * @return bool
+	 */
 	public function is_available()
 	{
 		$this->language->add_lang('captcha/hcaptcha', 'alfredoramos/hcaptcha');
@@ -84,6 +155,14 @@ class hcaptcha extends captcha_abstract
 		);
 	}
 
+	/**
+	 * Create the ACP page for configuring this CAPTCHA plugin.
+	 *
+	 * @param string		$id
+	 * @param \acp_captcha	$module
+	 *
+	 * @return void
+	 */
 	public function acp_page($id, $module)
 	{
 		$module->tpl_name = '@alfredoramos_hcaptcha/acp_captcha_hcaptcha';
@@ -92,13 +171,16 @@ class hcaptcha extends captcha_abstract
 		$form_key = 'acp_captcha';
 		add_form_key($form_key);
 
+		// Allowed values
 		$allowed = [
 			'theme'	=> ['light', 'dark'],
 			'size'	=> ['normal', 'compact']
 		];
 
+		// Validation errors
 		$errors = [];
 
+		// Field filters
 		$filters = [
 			'hcaptcha_key' => [
 				'filter' => FILTER_VALIDATE_REGEXP,
@@ -126,6 +208,7 @@ class hcaptcha extends captcha_abstract
 			]
 		];
 
+		// Request form data
 		if ($this->request->is_set_post('submit'))
 		{
 			if (!check_form_key($form_key))
@@ -133,6 +216,7 @@ class hcaptcha extends captcha_abstract
 				trigger_error($this->language->lang('FORM_INVALID') . adm_back_link($module->u_action), E_USER_WARNING);
 			}
 
+			// Form data
 			$fields = [
 				'hcaptcha_key' => $this->request->variable('hcaptcha_key', ''),
 				'hcaptcha_secret' => $this->request->variable('hcaptcha_secret', ''),
@@ -140,13 +224,16 @@ class hcaptcha extends captcha_abstract
 				'hcaptcha_size' => $this->request->variable('hcaptcha_size', '')
 			];
 
+			// Validation check
 			if ($this->helper->validate($fields, $filters, $errors))
 			{
+				// Save configuration
 				foreach ($fields as $key => $value)
 				{
 					$this->config->set($key, $value);
 				}
 
+				// Admin log
 				$this->log->add(
 					'admin',
 					$this->user->data['user_id'],
@@ -154,6 +241,7 @@ class hcaptcha extends captcha_abstract
 					'LOG_CONFIG_VISUAL'
 				);
 
+				// Confirm dialog
 				trigger_error(
 					$this->language->lang('CONFIG_UPDATED') .
 					adm_back_link($module->u_action)
@@ -162,6 +250,7 @@ class hcaptcha extends captcha_abstract
 
 		}
 
+		// Assign template variables
 		$this->template->assign_vars([
 			'U_ACTION'			=> $module->u_action,
 
@@ -174,6 +263,7 @@ class hcaptcha extends captcha_abstract
 			'S_HCAPTCHA_SETTINGS' => true
 		]);
 
+		// Assign allowed values
 		foreach ($allowed as $key => $value)
 		{
 			$block_var = sprintf('HCAPTCHA_%s_LIST', strtoupper($key));
@@ -192,6 +282,7 @@ class hcaptcha extends captcha_abstract
 			}
 		}
 
+		// Assign validation errors
 		foreach ($errors as $error)
 		{
 			$this->template->assign_block_vars('VALIDATION_ERRORS', [
@@ -200,11 +291,25 @@ class hcaptcha extends captcha_abstract
 		}
 	}
 
+	/**
+	 * Create the ACP page for previewing this CAPTCHA plugin.
+	 *
+	 * @see get_template()
+	 *
+	 * @param string $id
+	 *
+	 * @return bool|string
+	 */
 	public function get_demo_template($id)
 	{
 		return $this->get_template();
 	}
 
+	/**
+	 * Get the template for this CAPTCHA plugin.
+	 *
+	 * @return bool|string False if CAPTCHA is already solved, template file name otherwise
+	 */
 	public function get_template()
 	{
 		if ($this->is_solved())
@@ -235,6 +340,13 @@ class hcaptcha extends captcha_abstract
 		return '@alfredoramos_hcaptcha/captcha_hcaptcha.html';
 	}
 
+	/**
+	 * Validate the user's input.
+	 *
+	 * @see hcaptcha_verify_token()
+	 *
+	 * @return bool|string
+	 */
 	public function validate()
 	{
 		if (!parent::validate())
@@ -245,6 +357,11 @@ class hcaptcha extends captcha_abstract
 		return $this->hcaptcha_verify_token();
 	}
 
+	/**
+	 * Validate the token returned by hCaptcha.
+	 *
+	 * @return bool|string False on success, string containing the error otherwise
+	 */
 	protected function hcaptcha_verify_token()
 	{
 		$result = $this->request->variable('h-captcha-response', '', true);
@@ -254,10 +371,12 @@ class hcaptcha extends captcha_abstract
 			return $this->language->lang('HCAPTCHA_INCORRECT');
 		}
 
+		// Verify hCaptcha token
 		try
 		{
 			$client = new GuzzleClient([
-				'base_uri' => 'https://hcaptcha.com'
+				'base_uri' => 'https://hcaptcha.com',
+				'allow_redirects' => false
 			]);
 
 			$response = $client->request('POST', '/siteverify', [
@@ -285,6 +404,9 @@ class hcaptcha extends captcha_abstract
 		return $this->language->lang('HCAPTCHA_INCORRECT');
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public function get_login_error_attempts(): string
 	{
 		$this->language->add_lang('captcha/hcaptcha', 'alfredoramos/hcaptcha');

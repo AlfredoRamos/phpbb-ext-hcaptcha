@@ -13,6 +13,11 @@ use phpbb\db\migration\migration;
 
 class m001_config extends migration
 {
+	/**
+	 * Add hCaptcha configuration.
+	 *
+	 * @return array
+	 */
 	public function update_data()
 	{
 		return [

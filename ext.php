@@ -23,6 +23,13 @@ class ext extends base
 		return phpbb_version_compare(PHPBB_VERSION, '3.3.0', '>=');
 	}
 
+	/**
+	 * Handle configuration values when enabling the extension.
+	 *
+	 * @param mixed $old_state
+	 *
+	 * @return bool
+	 */
 	public function enable_step($old_state)
 	{
 		$parent_state = parent::enable_step($old_state);
@@ -35,6 +42,13 @@ class ext extends base
 		return $parent_state;
 	}
 
+	/**
+	 * Handle configuration values when disabling the extension.
+	 *
+	 * @param mixed $old_state
+	 *
+	 * @return bool
+	 */
 	public function disable_step($old_state)
 	{
 		switch ($old_state)
@@ -51,6 +65,13 @@ class ext extends base
 		return $state;
 	}
 
+	/**
+	 * Handle configuration values when purging the extension.
+	 *
+	 * @param mixed $old_state
+	 *
+	 * @return bool
+	 */
 	public function purge_step($old_state)
 	{
 		switch ($old_state)
@@ -67,6 +88,13 @@ class ext extends base
 		return $state;
 	}
 
+	/**
+	 * hCaptcha step configuration handler.
+	 *
+	 * @param string $step The name of the step.
+	 *
+	 * @return string
+	 */
 	private function handle_hcaptcha($step)
 	{
 		$config = $this->container->get('config');

@@ -1,3 +1,10 @@
+/**
+ * hCaptcha extension for phpBB.
+ * @author Alfredo Ramos <alfredo.ramos@yandex.com>
+ * @copyright 2021 Alfredo Ramos
+ * @license GPL-2.0-only
+ */
+
 #toggle-hcaptcha-secret {
 	cursor: pointer;
 	color: #d58512;
