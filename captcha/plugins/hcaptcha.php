@@ -17,7 +17,8 @@ use phpbb\template\template;
 use phpbb\language\language;
 use phpbb\log\log;
 use alfredoramos\hcaptcha\includes\helper;
-use GuzzleHttp\Client as HttpClient;
+use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Exception\GuzzleException;
 
 class hcaptcha extends captcha_abstract
 {
@@ -253,26 +254,33 @@ class hcaptcha extends captcha_abstract
 			return $this->language->lang('HCAPTCHA_INCORRECT');
 		}
 
-		$client = new HttpClient([
-			'base_uri' => 'https://hcaptcha.com'
-		]);
-
-		$response = $client->request('POST', '/siteverify', [
-			'form_params' => [
-				'sitekey'	=> $this->config['hcaptcha_key'],
-				'secret'	=> $this->config['hcaptcha_secret'],
-				'response'	=> $result,
-				'remoteip'	=> $this->user->ip
-			]
-		]);
-
-		$data = json_decode($response->getBody()->getContents());
-
-		if ($data->success === true)
+		try
 		{
-			$this->solved = true;
-			return false;
+			$client = new GuzzleClient([
+				'base_uri' => 'https://hcaptcha.com'
+			]);
+
+			$response = $client->request('POST', '/siteverify', [
+				'form_params' => [
+					'sitekey'	=> $this->config['hcaptcha_key'],
+					'secret'	=> $this->config['hcaptcha_secret'],
+					'response'	=> $result,
+					'remoteip'	=> $this->user->ip
+				]
+			]);
+
+			$data = json_decode($response->getBody()->getContents());
+
+			if ($data->success === true)
+			{
+				$this->solved = true;
+				return false;
+			}
 		}
+		catch (GuzzleException $ex)
+		{
+			return $this->language->lang('HCAPTCHA_REQUEST_EXCEPTION', $ex->getMessage());
+		};
 
 		return $this->language->lang('HCAPTCHA_INCORRECT');
 	}
