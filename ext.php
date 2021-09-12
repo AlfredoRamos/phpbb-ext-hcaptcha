@@ -70,30 +70,40 @@ class ext extends base
 	private function handle_hcaptcha($step)
 	{
 		$config = $this->container->get('config');
+		$fallback_service = 'core.captcha.plugins.gd';
 		$hcaptcha_service = 'alfredoramos.hcaptcha.captcha.hcaptcha';
 		$selected_key = 'hcaptcha_selected';
 
 		switch ($step)
 		{
 			case 'enable':
-				if (!empty($config[$selected_key]))
+				$old_captcha = !empty($config['old_captcha_plugin']) ? $config['old_captcha_plugin'] : $fallback_service;
+				$hcaptcha_selected = ($old_captcha === $hcaptcha_service);
+
+				$config->set('old_captcha_plugin', $config['captcha_plugin']);
+
+				if ($hcaptcha_selected)
 				{
 					$config->set('captcha_plugin', $hcaptcha_service);
 				}
-
-				$config->delete($selected_key);
 			break;
 
 			case 'disable':
-				if ($config['captcha_plugin'] === $hcaptcha_service)
+				$old_captcha = !empty($config['old_captcha_plugin']) ? $config['old_captcha_plugin'] : $fallback_service;
+				$old_captcha = ($old_captcha !== $hcaptcha_service) ? $old_captcha : $fallback_service;
+				$current_captcha = $config['captcha_plugin'];
+				$hcaptcha_selected = ($current_captcha === $hcaptcha_service);
+
+				$config->set('old_captcha_plugin', $current_captcha);
+
+				if ($hcaptcha_selected)
 				{
-					$config->set($selected_key, 1);
-					$config->set('captcha_plugin', 'core.captcha.plugins.gd');
+					$config->set('captcha_plugin', $old_captcha);
 				}
 			break;
 
 			case 'purge':
-				$config->delete($selected_key);
+				$config->delete('old_captcha_plugin');
 			break;
 		}
 

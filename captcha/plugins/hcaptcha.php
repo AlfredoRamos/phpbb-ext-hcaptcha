@@ -217,7 +217,6 @@ class hcaptcha extends captcha_abstract
 			$this->php_ext
 		);
 		$explain = $this->type !== CONFIRM_POST ? 'CONFIRM_EXPLAIN' : 'POST_CONFIRM_EXPLAIN';
-		$render = $this->config['hcaptcha_key'];
 
 		$this->template->assign_vars([
 			'CONFIRM_EXPLAIN'		=> $this->language->lang($explain, '<a href="' . $contact . '">', '</a>'),
