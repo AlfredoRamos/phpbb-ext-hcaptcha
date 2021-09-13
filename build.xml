@@ -21,10 +21,13 @@
 		<delete dir="${dir}/.github"/>
 		<delete file="${dir}/.gitignore" />
 		<delete file="${dir}/.gitattributes" />
+		<delete file="${dir}/.rubocop.yml" />
 		<delete file="${dir}/build.xml" />
 		<delete file="${dir}/crowdin.yml" />
 		<delete file="${dir}/phpunit.xml.dist" />
 		<delete file="${dir}/README.md" />
+		<delete file="${dir}/Gemfile" />
+		<delete file="${dir}/Rakefile" />
 
 		<if>
 			<and>
@@ -132,9 +135,19 @@
 			checkreturn="true"
 			outputProperty='package-version' />
 
+		<phingcall target="minify-assets">
+			<property name="dir" value="${package-directory}" />
+		</phingcall>
+
 		<phingcall target="wrap-package">
 			<property name="destination-filename" value="${build-directory}/upload/${vendor-name}_${extension-name}_${package-version}" />
 		</phingcall>
+	</target>
+
+	<!-- Build and ninify assets -->
+	<target name="minify-assets">
+		<echo msg="Minifying assets" />
+		<exec dir="${dir}" command="bundle exec rake build:all" checkreturn="true" />
 	</target>
 
 	<!-- Checkout a given version and install/clean the dependencies -->
