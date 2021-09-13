@@ -99,7 +99,7 @@ class acp_test extends \phpbb_functional_test_case
 			)
 		);
 
-		$container = $crawler->filterXPath('//div[contains(@class, "h-captcha")]/parent::*');
+		$container = $crawler->filterXPath('//div[contains(@class, "h-captcha")]/ancestor::fieldset');
 
 		$script = $container->filter('script');
 		$this->assertSame(1, $script->count());
