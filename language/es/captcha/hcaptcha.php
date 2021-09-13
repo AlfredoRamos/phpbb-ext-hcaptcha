@@ -7,15 +7,15 @@
  * @license GPL-2.0-only
  */
 
- /**
-  * @ignore
-  */
+/**
+ * @ignore
+ */
 if (!defined('IN_PHPBB'))
 {
 	exit;
 }
 
- /**
+/**
  * @ignore
  */
 if (empty($lang) || !is_array($lang))

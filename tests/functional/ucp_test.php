@@ -48,11 +48,9 @@ class ucp_test extends \phpbb_functional_test_case
 			)
 		);
 
-		$script = $container->filter('script');
+		$script = $crawler->filterXPath('//script[contains(@src, "hcaptcha.com")]');
 		$this->assertSame(1, $script->count());
 		$this->assertSame('https://js.hcaptcha.com/1/api.js', $script->attr('src'));
-		$this->assertSame('', $script->attr('async'));
-		$this->assertSame('defer', $script->attr('defer'));
 
 		$noscript = $container->filter('noscript');
 		$this->assertSame(1, $noscript->count());

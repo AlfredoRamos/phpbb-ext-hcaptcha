@@ -1,10 +1,10 @@
 {% if S_HCAPTCHA_AVAILABLE %}
+	<noscript>
+		<div class="errorbox"><p>{{ lang('HCAPTCHA_NOSCRIPT') }}</p></div>
+	</noscript>
 	<dl>
 		<dt>&nbsp;</dt>
 		<dd>
-			<noscript>
-				<div class="warningbox">{{ lang('HCAPTCHA_NOSCRIPT') }}</div>
-			</noscript>
 			<script src="{{ U_HCAPTCHA_SCRIPT }}" async defer></script>
 			<div class="h-captcha" data-sitekey="{{ HCAPTCHA_KEY }}"{% if HCAPTCHA_THEME %} data-theme="{{ HCAPTCHA_THEME }}"{% endif %}{% if HCAPTCHA_SIZE %} data-size="{{ HCAPTCHA_SIZE }}"{% endif %}></div>
 		</dd>

@@ -1,11 +1,14 @@
 <div class="hcaptcha-panel panel" style="text-align: center;">
 	<div class="inner">
 		{% if S_HCAPTCHA_AVAILABLE %}
+		{% if not INCLUDED_HCAPTCHA_JS %}
+		{% INCLUDEJS U_HCAPTCHA_SCRIPT %}
+		{%- set INCLUDED_HCAPTCHA_JS = true -%}
+		{% endif %}
 		<noscript>
 			<div class="hcaptcha-error rules error">{{ lang('HCAPTCHA_NOSCRIPT') }}</div>
 		</noscript>
 		<fieldset class="fields2">
-			<script src="{{ U_HCAPTCHA_SCRIPT }}" async defer></script>
 			<div class="h-captcha" data-sitekey="{{ HCAPTCHA_KEY }}"{% if HCAPTCHA_THEME %} data-theme="{{ HCAPTCHA_THEME }}"{% endif %}{% if HCAPTCHA_SIZE %} data-size="{{ HCAPTCHA_SIZE }}"{% endif %}></div>
 		</fieldset>
 		{% else %}
