@@ -123,6 +123,13 @@ jobs:
         working-directory: phpBB3
         run: .github/setup-phpbb.sh $DB $PHP_VERSION $NOTESTS
 
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0'
+          bundler-cache: true
+          working-directory: extension
+
       - name: Setup extension
         working-directory: extension
         run: |
@@ -170,3 +177,22 @@ jobs:
         if: ${{ env.NOTESTS != 1 }}
         working-directory: phpBB3
         run: phpBB/vendor/bin/phpunit --configuration phpBB/ext/$EXTNAME/ci/phpunit-$DB-github.xml --bootstrap tests/bootstrap.php
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout extension
+        uses: actions/checkout@master
+        with:
+          path: extension
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0'
+          bundler-cache: true
+          working-directory: extension
+
+      - name: Test Ruby
+        working-directory: extension
+        run: bundle exec rake rubocop
