@@ -3,8 +3,8 @@
 	"type": "phpbb-extension",
 	"description": "hCaptcha extension for phpBB",
 	"homepage": "https://github.com/AlfredoRamos/phpbb-ext-hcaptcha",
-	"version": "0.1.0-dev",
-	"time": "2021-09-11",
+	"version": "0.2.0-dev",
+	"time": "2021-09-14",
 	"keywords": ["phpbb", "extension", "captcha", "hcatpcha", "anti-spam"],
 	"license": "GPL-2.0-only",
 	"authors": [
