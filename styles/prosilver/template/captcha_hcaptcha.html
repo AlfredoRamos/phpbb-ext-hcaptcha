@@ -1,18 +1,18 @@
-<div class="hcaptcha-panel panel" style="text-align: center;">
-	<div class="inner">
-		{% if S_HCAPTCHA_AVAILABLE %}
+<div class="hcaptcha-container">
+	{% if S_HCAPTCHA_AVAILABLE %}
+		{% if not INCLUDED_HCAPTCHA_CSS %}
+			{% INCLUDECSS '@alfredoramos_hcaptcha/css/hcaptcha.css' %}
+			{%- set INCLUDED_HCAPTCHA_CSS = true -%}
+		{% endif %}
 		{% if not INCLUDED_HCAPTCHA_JS %}
-		{% INCLUDEJS U_HCAPTCHA_SCRIPT %}
-		{%- set INCLUDED_HCAPTCHA_JS = true -%}
+			{% INCLUDEJS U_HCAPTCHA_SCRIPT %}
+			{%- set INCLUDED_HCAPTCHA_JS = true -%}
 		{% endif %}
 		<noscript>
 			<div class="hcaptcha-error rules error">{{ lang('HCAPTCHA_NOSCRIPT') }}</div>
 		</noscript>
-		<fieldset class="fields2">
-			<div class="h-captcha" data-sitekey="{{ HCAPTCHA_KEY }}"{% if HCAPTCHA_THEME %} data-theme="{{ HCAPTCHA_THEME }}"{% endif %}{% if HCAPTCHA_SIZE %} data-size="{{ HCAPTCHA_SIZE }}"{% endif %}></div>
-		</fieldset>
-		{% else %}
-			{{ lang('HCAPTCHA_NOT_AVAILABLE') }}
-		{% endif %}
-	</div>
+		<div class="h-captcha" data-sitekey="{{ HCAPTCHA_KEY }}"{% if HCAPTCHA_THEME %} data-theme="{{ HCAPTCHA_THEME }}"{% endif %}{% if HCAPTCHA_SIZE %} data-size="{{ HCAPTCHA_SIZE }}"{% endif %}></div>
+	{% else %}
+		{{ lang('HCAPTCHA_NOT_AVAILABLE') }}
+	{% endif %}
 </div>
