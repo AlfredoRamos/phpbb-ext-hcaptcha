@@ -31,7 +31,7 @@ class ucp_test extends \phpbb_functional_test_case
 
 		$crawler = self::submit($form);
 
-		$container = $crawler->filter('.hcaptcha-panel');
+		$container = $crawler->filter('.hcaptcha-container');
 		$this->assertSame(1, $container->count());
 
 		$widget = $container->filter('.h-captcha');
