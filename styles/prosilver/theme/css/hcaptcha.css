@@ -10,8 +10,8 @@
 }
 
 .hcaptcha-error,
-#register .hcaptcha-container .h-captcha,
-.section-app\/contactadmin .hcaptcha-container .h-captcha {
+.section-app\/contactadmin .hcaptcha-container .h-captcha,
+#register .hcaptcha-container .h-captcha {
 	text-align: center;
 }
 
