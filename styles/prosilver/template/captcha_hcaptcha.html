@@ -13,6 +13,6 @@
 		</noscript>
 		<div class="h-captcha" data-sitekey="{{ HCAPTCHA_KEY }}"{% if HCAPTCHA_THEME %} data-theme="{{ HCAPTCHA_THEME }}"{% endif %}{% if HCAPTCHA_SIZE %} data-size="{{ HCAPTCHA_SIZE }}"{% endif %}></div>
 	{% else %}
-		{{ lang('HCAPTCHA_NOT_AVAILABLE') }}
+		<div class="hcaptcha-error rules error">{{ lang('HCAPTCHA_NOT_AVAILABLE') }}</div>
 	{% endif %}
 </div>
