@@ -100,6 +100,12 @@
 		<delete dir="${build-directory}" />
 	</target>
 
+	<!-- Minify CSS and JS assets -->
+	<target name="minify-assets">
+		<echo msg="Minifying assets" />
+		<exec dir="${dir}" command="bundle exec rake build:all" checkreturn="true" />
+	</target>
+
 	<!-- Recreate the necessary folders -->
 	<target name="prepare-structure" depends="clean">
 		<mkdir dir="${build-directory}" />
@@ -135,19 +141,19 @@
 			checkreturn="true"
 			outputProperty='package-version' />
 
-		<phingcall target="minify-assets">
-			<property name="dir" value="${package-directory}" />
-		</phingcall>
+		<!-- Build and ninify assets -->
+		<if>
+			<equals arg1="${env}" arg2="production" />
+			<then>
+				<phingcall target="minify-assets">
+					<property name="dir" value="${package-directory}" />
+				</phingcall>
+			</then>
+		</if>
 
 		<phingcall target="wrap-package">
 			<property name="destination-filename" value="${build-directory}/upload/${vendor-name}_${extension-name}_${package-version}" />
 		</phingcall>
-	</target>
-
-	<!-- Build and ninify assets -->
-	<target name="minify-assets">
-		<echo msg="Minifying assets" />
-		<exec dir="${dir}" command="bundle exec rake build:all" checkreturn="true" />
 	</target>
 
 	<!-- Checkout a given version and install/clean the dependencies -->

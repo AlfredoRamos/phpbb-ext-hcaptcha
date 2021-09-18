@@ -14,7 +14,7 @@
 </div>
 {% endif %}
 
-<form id="acp_captcha" method="post" action="{{ U_ACTION }}">
+<form id="acp-hcaptcha" method="post" action="{{ U_ACTION }}">
 	<fieldset>
 		<legend>{{ lang('GENERAL_OPTIONS') }}</legend>
 		<dl>
@@ -34,7 +34,7 @@
 			<dd>
 				<input type="password" id="hcaptcha-secret" name="hcaptcha_secret" value="{{ HCAPTCHA_SECRET }}" required="required" autocomplete="off" class="medium">
 				<span id="toggle-hcaptcha-secret" title="{{ lang('ACP_HCAPTCHA_TOGGLE_SECRET', lang('HCAPTCHA_SECRET'))|striptags|escape }}">
-					<i class="icon fa-lg fa-eye" aria-hidden="true"></i>
+					<i class="icon acp-icon acp-icon-resync fa-eye fa-fw" aria-hidden="true"></i>
 				</span>
 			</dd>
 		</dl>
