@@ -4,14 +4,11 @@
  * @copyright 2021 Alfredo Ramos
  * @license GPL-2.0-only
  */
-
 .hcaptcha-container {
 	margin: 1em auto;
 }
 
-.hcaptcha-error,
-.section-app\/contactadmin .hcaptcha-container .h-captcha,
-#register .hcaptcha-container .h-captcha {
+.hcaptcha-error, .section-app\/contactadmin .hcaptcha-container .h-captcha, #register .hcaptcha-container .h-hcaptcha {
 	text-align: center;
 }
 
