@@ -17,11 +17,13 @@
 	<target name="clean-package">
 		<echo msg="Cleaning files and directories" />
 
+		<delete dir="${dir}/scss" />
 		<delete dir="${dir}/tests" />
 		<delete dir="${dir}/.github"/>
 		<delete file="${dir}/.gitignore" />
 		<delete file="${dir}/.gitattributes" />
 		<delete file="${dir}/.rubocop.yml" />
+		<delete file="${dir}/.scss-lint.yml" />
 		<delete file="${dir}/build.xml" />
 		<delete file="${dir}/crowdin.yml" />
 		<delete file="${dir}/phpunit.xml.dist" />
@@ -104,6 +106,7 @@
 	<target name="minify-assets">
 		<echo msg="Minifying assets" />
 		<exec dir="${dir}" command="bundle exec rake build:all" checkreturn="true" />
+		<exec dir="${dir}" command="vim -c 'argdo setf css | execute &quot;normal! gg=G&quot; | update | quitall' $(find . -type f -path '*.css' | xargs)" checkreturn="true" />
 	</target>
 
 	<!-- Recreate the necessary folders -->
