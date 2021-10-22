@@ -33,7 +33,7 @@
 			</dt>
 			<dd>
 				<input type="password" id="hcaptcha-secret" name="hcaptcha_secret" value="{{ HCAPTCHA_SECRET }}" required="required" autocomplete="off" class="medium">
-				<span id="toggle-hcaptcha-secret" title="{{ lang('ACP_HCAPTCHA_TOGGLE_SECRET', lang('HCAPTCHA_SECRET'))|striptags|escape }}">
+				<span id="toggle-hcaptcha-secret" title="{{ lang('ACP_HCAPTCHA_TOGGLE_SECRET', lang('HCAPTCHA_SECRET'))|striptags|escape('html_attr') }}">
 					<i class="icon acp-icon acp-icon-resync fa-eye fa-fw" aria-hidden="true"></i>
 				</span>
 			</dd>
@@ -92,7 +92,6 @@
 			{{ S_FORM_TOKEN }}
 		</p>
 	</fieldset>
-</form>
 </form>
 
 {% include 'overall_footer.html' %}
