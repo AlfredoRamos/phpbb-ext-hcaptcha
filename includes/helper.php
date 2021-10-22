@@ -61,7 +61,6 @@ class helper
 					sprintf('%s', strtoupper($key))
 				);
 				unset($fields[$key]);
-				continue;
 			}
 		}
 
@@ -69,7 +68,7 @@ class helper
 		{
 			$errors[]['message'] = $this->language->lang(
 				'ACP_HCAPTCHA_VALIDATE_INVALID_FIELDS',
-				implode(', ', $invalid)
+				implode($this->language->lang('COMMA_SEPARATOR'), $invalid)
 			);
 		}
 
