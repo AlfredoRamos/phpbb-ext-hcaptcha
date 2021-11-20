@@ -85,14 +85,14 @@ jobs:
           #  db-version: '10.5'
     steps:
       - name: Checkout phpBB
-        uses: actions/checkout@master
+        uses: actions/checkout@v2
         with:
           repository: phpbb/phpbb
           ref: ${{ env.PHPBB_BRANCH }}
           path: phpBB3
 
       - name: Checkout extension
-        uses: actions/checkout@master
+        uses: actions/checkout@v2
         with:
           path: extension
 
@@ -113,7 +113,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ steps.setup-composer.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock', '**/composer.json', 'phpBB3/phpBB/ext/${{ env.EXTNAME }}/composer.lock', 'phpBB3/phpBB/ext/${{ env.EXTNAME }}/composer.json') }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock', '**/composer.json') }}
           restore-keys: |
             ${{ runner.os }}-composer-
 
@@ -181,7 +181,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout extension
-        uses: actions/checkout@master
+        uses: actions/checkout@v2
         with:
           path: extension
 
