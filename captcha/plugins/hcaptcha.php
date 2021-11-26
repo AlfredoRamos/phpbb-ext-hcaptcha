@@ -148,11 +148,7 @@ class hcaptcha extends captcha_abstract
 	public function is_available()
 	{
 		$this->language->add_lang('captcha/hcaptcha', 'alfredoramos/hcaptcha');
-
-		return (
-			!empty($this->config['hcaptcha_key']) &&
-			!empty($this->config['hcaptcha_secret'])
-		);
+		return (!empty($this->config['hcaptcha_key']) && !empty($this->config['hcaptcha_secret']));
 	}
 
 	/**
@@ -234,18 +230,10 @@ class hcaptcha extends captcha_abstract
 				}
 
 				// Admin log
-				$this->log->add(
-					'admin',
-					$this->user->data['user_id'],
-					$this->user->ip,
-					'LOG_CONFIG_VISUAL'
-				);
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_CONFIG_VISUAL');
 
 				// Confirm dialog
-				trigger_error(
-					$this->language->lang('CONFIG_UPDATED') .
-					adm_back_link($module->u_action)
-				);
+				trigger_error($this->language->lang('CONFIG_UPDATED') . adm_back_link($module->u_action));
 			}
 
 		}
@@ -317,11 +305,7 @@ class hcaptcha extends captcha_abstract
 			return false;
 		}
 
-		$contact = phpbb_get_board_contact_link(
-			$this->config,
-			$this->root_path,
-			$this->php_ext
-		);
+		$contact = phpbb_get_board_contact_link($this->config, $this->root_path, $this->php_ext);
 		$explain = $this->type !== CONFIRM_POST ? 'CONFIRM_EXPLAIN' : 'POST_CONFIRM_EXPLAIN';
 
 		$this->template->assign_vars([

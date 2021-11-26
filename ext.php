@@ -93,10 +93,15 @@ class ext extends base
 	 *
 	 * @param string $step The name of the step.
 	 *
-	 * @return string
+	 * @return bool|string
 	 */
-	private function handle_hcaptcha($step)
+	private function handle_hcaptcha($step = '')
 	{
+		if (empty($step))
+		{
+			return false;
+		}
+
 		$config = $this->container->get('config');
 		$fallback_service = 'core.captcha.plugins.gd';
 		$hcaptcha_service = 'alfredoramos.hcaptcha.captcha.hcaptcha';
@@ -105,11 +110,11 @@ class ext extends base
 		{
 			case 'enable':
 				$old_captcha = !empty($config['old_captcha_plugin']) ? $config['old_captcha_plugin'] : $fallback_service;
-				$hcaptcha_selected = ($old_captcha === $hcaptcha_service);
+				$current_captcha = $config['captcha_plugin'];
 
-				$config->set('old_captcha_plugin', $config['captcha_plugin']);
+				$config->set('old_captcha_plugin', $current_captcha);
 
-				if ($hcaptcha_selected)
+				if ($old_captcha === $hcaptcha_service)
 				{
 					$config->set('captcha_plugin', $hcaptcha_service);
 				}
@@ -119,11 +124,10 @@ class ext extends base
 				$old_captcha = !empty($config['old_captcha_plugin']) ? $config['old_captcha_plugin'] : $fallback_service;
 				$old_captcha = ($old_captcha !== $hcaptcha_service) ? $old_captcha : $fallback_service;
 				$current_captcha = $config['captcha_plugin'];
-				$hcaptcha_selected = ($current_captcha === $hcaptcha_service);
 
 				$config->set('old_captcha_plugin', $current_captcha);
 
-				if ($hcaptcha_selected)
+				if ($current_captcha === $hcaptcha_service)
 				{
 					$config->set('captcha_plugin', $old_captcha);
 				}
