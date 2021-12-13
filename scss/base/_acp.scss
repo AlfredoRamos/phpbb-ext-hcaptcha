@@ -1,14 +1,13 @@
 #acp-hcaptcha {
-	// scss-lint:disable QualifyingElement
-	input[type="text"],
-	input[type="password"] {
+	input[type='text'],
+	input[type='password'] {
 		font-family: Consolas, monaco, monospace;
 	}
 }
 
 #toggle-hcaptcha-secret {
-	cursor: pointer;
 	vertical-align: middle;
+	cursor: pointer;
 
 	&,
 	& .icon {

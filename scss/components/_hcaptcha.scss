@@ -3,7 +3,6 @@
 		margin: 1em auto;
 	}
 
-	// scss-lint:disable SelectorFormat
 	&-error,
 	.section-app\/contactadmin &-container .h-captcha,
 	#register &-container .h-captcha {
@@ -18,7 +17,6 @@
 		margin-left: 15em;
 	}
 
-	// scss-lint:disable SelectorDepth, SelectorFormat
 	.section-app\/contactadmin #postform &-container .h-captcha {
 		margin: 0;
 	}
