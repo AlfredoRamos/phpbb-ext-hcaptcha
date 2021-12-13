@@ -19,7 +19,7 @@
 		"build-templates": "node .github/scripts/build-templates.js",
 		"build": "npm run build-scss && npm run build-css && npm run build-js && npm run build-templates",
 		"lint-scss": "npx stylelint '**/*.scss'",
-		"lint-css": "npx stylelint '**/*.css'"
+		"lint-css": "npx stylelint '**/*.css' --fix"
 	},
 	"devDependencies": {
 		"autoprefixer": "^10.4.0",

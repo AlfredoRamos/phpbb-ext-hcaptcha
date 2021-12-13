@@ -4,8 +4,8 @@
  * @copyright 2021 Alfredo Ramos
  * @license GPL-2.0-only
  */
-#acp-hcaptcha input[type=text],
-#acp-hcaptcha input[type=password] {
+#acp-hcaptcha input[type="text"],
+#acp-hcaptcha input[type="password"] {
 	font-family: Consolas, monaco, monospace;
 }
 
@@ -13,6 +13,8 @@
 	vertical-align: middle;
 	cursor: pointer;
 }
-#toggle-hcaptcha-secret, #toggle-hcaptcha-secret .icon {
+
+#toggle-hcaptcha-secret,
+#toggle-hcaptcha-secret .icon {
 	display: inline-block;
 }
