@@ -170,7 +170,7 @@ class hcaptcha extends captcha_abstract
 		// Allowed values
 		$allowed = [
 			'theme'	=> ['light', 'dark'],
-			'size'	=> ['normal', 'compact']
+			'size'	=> ['normal', 'compact', 'invisible']
 		];
 
 		// Validation errors

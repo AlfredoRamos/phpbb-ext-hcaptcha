@@ -38,9 +38,11 @@ $lang = array_merge($lang, [
 	'HCAPTCHA_SIZE_EXPLAIN' => 'The size of the hCaptcha widget.',
 	'HCAPTCHA_SIZE_NORMAL' => 'Normal',
 	'HCAPTCHA_SIZE_COMPACT' => 'Compact',
+	'HCAPTCHA_SIZE_INVISIBLE' => 'Invisible',
 	'HCAPTCHA_NOT_AVAILABLE' => 'In order to use hCaptcha, you must create an account on <a href="https://www.hcaptcha.com/" rel="external nofollow noreferrer noopener" target="_blank">www.hcaptcha.com</a>.',
 	'HCAPTCHA_INCORRECT' => 'The solution you provided was incorrect.',
 	'HCAPTCHA_NOSCRIPT' => 'Please enable JavaScript in your browser to load the challenge.',
+	'HCAPTCHA_INVISIBLE_DISCLOSURE' => 'This site is protected by hCaptcha and its <a href="https://hcaptcha.com/privacy" rel="external nofollow noreferrer noopener" target="_blank">Privacy Policy</a> and <a href="https://hcaptcha.com/terms" rel="external nofollow noreferrer noopener" target="_blank">Terms of Service</a> apply.',
 	'HCAPTCHA_LOGIN_ERROR_ATTEMPTS' => 'You have exceeded the maximum number of login attempts allowed.<br>In addition to your username and password, hCaptcha will be used to authenticate your session.',
 	'HCAPTCHA_REQUEST_EXCEPTION' => 'hCaptcha request error: %s',
 

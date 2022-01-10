@@ -9,19 +9,24 @@
 }
 
 .hcaptcha-error,
-.section-app\/contactadmin .hcaptcha-container .h-captcha,
-#register .hcaptcha-container .h-captcha {
+.hcaptcha-disclosure,
+.hcaptcha-container .h-captcha {
 	text-align: center;
+}
+
+#login .hcaptcha-container .h-captcha,
+#postingbox .hcaptcha-container .h-captcha {
+	text-align: left;
 }
 
 #login .hcaptcha-container .h-captcha {
 	margin-left: 16em;
 }
 
-#postform .hcaptcha-container .h-captcha {
+#postingbox .hcaptcha-container .h-captcha {
 	margin-left: 15em;
 }
 
-.section-app\/contactadmin #postform .hcaptcha-container .h-captcha {
-	margin: 0;
+#postingbox .hcaptcha-disclosure {
+	text-align: left;
 }
