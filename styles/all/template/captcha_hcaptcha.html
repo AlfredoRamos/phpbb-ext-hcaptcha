@@ -9,10 +9,10 @@
 			{%- set INCLUDED_HCAPTCHA_JS = true -%}
 		{% endif %}
 		<noscript>
-			<div class="hcaptcha-error rules error">{{ lang('HCAPTCHA_NOSCRIPT') }}</div>
+			<div class="hcaptcha-error">{{ lang('HCAPTCHA_NOSCRIPT') }}</div>
 		</noscript>
 		<div class="h-captcha" data-sitekey="{{ HCAPTCHA_KEY }}"{% if HCAPTCHA_THEME %} data-theme="{{ HCAPTCHA_THEME }}"{% endif %}{% if HCAPTCHA_SIZE %} data-size="{{ HCAPTCHA_SIZE }}"{% endif %}></div>
 	{% else %}
-		<div class="hcaptcha-error rules error">{{ lang('HCAPTCHA_NOT_AVAILABLE') }}</div>
+		<div class="hcaptcha-error">{{ lang('HCAPTCHA_NOT_AVAILABLE') }}</div>
 	{% endif %}
 </div>

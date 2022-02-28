@@ -1,0 +1,22 @@
+/**
+ * hCaptcha extension for phpBB.
+ * @author Alfredo Ramos <alfredo.ramos@yandex.com>
+ * @copyright 2021 Alfredo Ramos
+ * @license GPL-2.0-only
+ */
+.hcaptcha-container,
+.hcaptcha-error {
+	margin: 1rem auto;
+}
+
+.hcaptcha-container .h-captcha,
+.hcaptcha-error {
+	text-align: center;
+}
+
+.hcaptcha-error {
+	font-weight: bold;
+	background-color: #f3cbca;
+	color: #d9534f;
+	padding: 1rem;
+}

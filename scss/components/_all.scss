@@ -1,0 +1,18 @@
+.hcaptcha {
+	&-container,
+	&-error {
+		margin: 1rem auto;
+	}
+
+	&-container .h-captcha,
+	&-error {
+		text-align: center;
+	}
+
+	&-error {
+		font-weight: bold;
+		background-color: $bg-color;
+		color: $fg-color;
+		padding: 1rem;
+	}
+}
