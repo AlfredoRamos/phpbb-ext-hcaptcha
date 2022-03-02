@@ -5,5 +5,8 @@
  * @license GPL-2.0-only
  */
 
-// Base
-@import '../../../../components/acp';
+// Abstracts
+@import '../../../../../abstracts/variables';
+
+// Components
+@import '../../../../../components/all';
