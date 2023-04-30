@@ -5,7 +5,7 @@
  * @license GPL-2.0-only
  */
 
-(function () {
+(() => {
 	'use strict';
 
 	// Element.closest() polifyll
@@ -17,7 +17,7 @@
 				Element.prototype.webkitMatchesSelector;
 		}
 
-		Element.prototype.closest = function (s) {
+		Element.prototype.closest = (s) => {
 			let el = this;
 
 			do {
@@ -33,7 +33,7 @@
 	}
 
 	// Toggle hCaptcha secret key
-	document.body.addEventListener('click', function (e) {
+	document.body.addEventListener('click', (e) => {
 		const toggle = e.target.closest('#toggle-hcaptcha-secret');
 
 		if (!toggle) {

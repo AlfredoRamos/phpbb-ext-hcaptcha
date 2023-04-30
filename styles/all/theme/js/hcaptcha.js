@@ -5,7 +5,7 @@
  * @license GPL-2.0-only
  */
 
-(function() {
+(() => {
 	'use strict';
 
 	// hCaptcha library must be defined first
@@ -25,24 +25,34 @@
 		return;
 	}
 
-	// Solve hCaptcha challenge
-	form.addEventListener('click', function(event) {
-		if (!event.target.closest('[type="submit"]')) {
-			return;
-		}
+	const button = form.querySelector('[type="submit"]');
 
-		// Do not submit the form yet
-		event.preventDefault();
+	if (!button) {
+		return;
+	}
+
+	button.addEventListener('click', (e) => {
+		e.preventDefault();
 
 		// Generate hCaptcha response
-		window.hcaptcha.execute();
+		window.hcaptcha.execute({async: true}).then((response) => {
+			const captchaResponse = form.querySelector('[name="h-captcha-response"]');
 
-		// Submit form
-		if (form.requestSubmit) {
-			form.requestSubmit();
-		} else {
-			// Workaround for error "submit() is not a function" due to field being named "submit"
-			HTMLFormElement.prototype.submit.call(form);
-		}
+			if (!captchaResponse) {
+				return;
+			}
+
+			captchaResponse.value = response?.response || '';
+		}).catch((error) => {
+			console.error(error);
+		}).finally(() => {
+			// Submit form
+			if (form.requestSubmit) {
+				form.requestSubmit();
+			} else {
+				// Workaround for error "submit() is not a function" due to field being named "submit"
+				HTMLFormElement.prototype.submit.call(form);
+			}
+		});
 	});
 })();
