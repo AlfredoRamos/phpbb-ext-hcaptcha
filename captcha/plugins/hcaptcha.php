@@ -187,7 +187,7 @@ class hcaptcha extends captcha_abstract
 			'hcaptcha_secret' => [
 				'filter' => FILTER_VALIDATE_REGEXP,
 				'options' => [
-					'regexp' => '#^0x[a-fA-F0-9]{40}$#'
+					'regexp' => '#^(0x[a-fA-F0-9]{40}|ES_[a-fA-F0-9]{32})$#'
 				]
 			],
 			'hcaptcha_theme' => [
@@ -235,7 +235,6 @@ class hcaptcha extends captcha_abstract
 				// Confirm dialog
 				trigger_error($this->language->lang('CONFIG_UPDATED') . adm_back_link($module->u_action));
 			}
-
 		}
 
 		// Assign template variables
