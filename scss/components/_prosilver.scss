@@ -4,20 +4,25 @@
 	}
 
 	&-error,
-	.section-app\/contactadmin &-container .h-captcha,
-	#register &-container .h-captcha {
+	&-disclosure,
+	&-container .h-captcha {
 		text-align: center;
+	}
+
+	#login &-container .h-captcha,
+	#postingbox &-container .h-captcha {
+		text-align: left;
 	}
 
 	#login &-container .h-captcha {
 		margin-left: 16em;
 	}
 
-	#postform &-container .h-captcha {
+	#postingbox &-container .h-captcha {
 		margin-left: 15em;
 	}
 
-	.section-app\/contactadmin #postform &-container .h-captcha {
-		margin: 0;
+	#postingbox &-disclosure {
+		text-align: left;
 	}
 }

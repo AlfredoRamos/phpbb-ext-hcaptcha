@@ -60,7 +60,7 @@ class acp_test extends \phpbb_functional_test_case
 		$this->assertTrue($form->has('hcaptcha_size'));
 		$this->assertSame('normal', $form->get('hcaptcha_size')->getValue());
 		$this->assertSame(
-			['normal', 'compact'],
+			['normal', 'compact', 'invisible'],
 			$form->get('hcaptcha_size')->availableOptionValues()
 		);
 
