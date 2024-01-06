@@ -1,5 +1,4 @@
-# This file is for standardizing the coding style between different editors
-# http://editorconfig.org/
+# http://editorconfig.org
 
 root = true
 
@@ -18,6 +17,6 @@ trim_trailing_whitespace = false
 indent_size = 4
 indent_style = space
 
-[.github/workflows/*.yml]
+[.github/**/*.yml]
 indent_size = 2
 indent_style = space
