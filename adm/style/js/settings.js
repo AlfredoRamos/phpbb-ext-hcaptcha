@@ -8,30 +8,6 @@
 (function () {
 	'use strict';
 
-	// Element.closest() polifyll
-	// https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#polyfill
-	if (!Element.prototype.closest) {
-		if (!Element.prototype.matches) {
-			Element.prototype.matches =
-				Element.prototype.msMatchesSelector ||
-				Element.prototype.webkitMatchesSelector;
-		}
-
-		Element.prototype.closest = function (s) {
-			let el = this;
-
-			do {
-				if (Element.prototype.matches.call(el, s)) {
-					return el;
-				}
-
-				el = el.parentElement || el.parentNode;
-			} while (el !== null && el.nodeType === 1);
-
-			return null;
-		};
-	}
-
 	// Toggle hCaptcha secret key
 	document.body.addEventListener('click', function (e) {
 		const toggle = e.target.closest('#toggle-hcaptcha-secret');
@@ -53,7 +29,7 @@
 		field.setAttribute('type', isHidden ? 'text' : 'password');
 
 		// Toggle icon
-		icon.classList.toggle('fa-eye-slash');
-		icon.classList.toggle('fa-eye');
+		icon.classList.toggle('fa-eye-slash', isHidden);
+		icon.classList.toggle('fa-eye', !isHidden);
 	});
 })();
