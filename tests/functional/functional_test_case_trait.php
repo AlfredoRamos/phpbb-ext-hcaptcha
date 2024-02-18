@@ -2,7 +2,7 @@
 
 /**
  * hCaptcha extension for phpBB.
- * @author Alfredo Ramos <alfredo.ramos@skiff.com>
+ * @author Alfredo Ramos <alfredo.ramos@proton.me>
  * @copyright 2021 Alfredo Ramos
  * @license GPL-2.0-only
  */
@@ -28,18 +28,17 @@ trait functional_test_case_trait
 			'hcaptcha_secret' => '0x0000000000000000000000000000000000000000'
 		];
 
-		foreach ($config_ary as $key => $value)
-		{
+		foreach ($config_ary as $key => $value) {
 			$key = trim($key);
 			$value = trim($value);
 
 			$sql = 'UPDATE ' . CONFIG_TABLE . '
 				SET ' . $db->sql_build_array('UPDATE', [
-					'config_value' => $value
-				]) . '
+				'config_value' => $value
+			]) . '
 				WHERE ' . $db->sql_build_array('UPDATE', [
-					'config_name' => $key
-				]);
+				'config_name' => $key
+			]);
 
 			$db->sql_query($sql);
 		}

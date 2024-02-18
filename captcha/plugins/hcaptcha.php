@@ -2,7 +2,7 @@
 
 /**
  * hCaptcha extension for phpBB.
- * @author Alfredo Ramos <alfredo.ramos@skiff.com>
+ * @author Alfredo Ramos <alfredo.ramos@proton.me>
  * @copyright 2021 Alfredo Ramos
  * @license GPL-2.0-only
  */
@@ -205,10 +205,8 @@ class hcaptcha extends captcha_abstract
 		];
 
 		// Request form data
-		if ($this->request->is_set_post('submit'))
-		{
-			if (!check_form_key($form_key))
-			{
+		if ($this->request->is_set_post('submit')) {
+			if (!check_form_key($form_key)) {
 				trigger_error($this->language->lang('FORM_INVALID') . adm_back_link($module->u_action), E_USER_WARNING);
 			}
 
@@ -221,11 +219,9 @@ class hcaptcha extends captcha_abstract
 			];
 
 			// Validation check
-			if ($this->helper->validate($fields, $filters, $errors))
-			{
+			if ($this->helper->validate($fields, $filters, $errors)) {
 				// Save configuration
-				foreach ($fields as $key => $value)
-				{
+				foreach ($fields as $key => $value) {
 					$this->config->set($key, $value);
 				}
 
@@ -251,12 +247,10 @@ class hcaptcha extends captcha_abstract
 		]);
 
 		// Assign allowed values
-		foreach ($allowed as $key => $value)
-		{
+		foreach ($allowed as $key => $value) {
 			$block_var = sprintf('HCAPTCHA_%s_LIST', strtoupper($key));
 
-			foreach ($value as $val)
-			{
+			foreach ($value as $val) {
 				$this->template->assign_block_vars($block_var, [
 					'KEY' => $val,
 					'NAME' => $this->language->lang(sprintf(
@@ -270,8 +264,7 @@ class hcaptcha extends captcha_abstract
 		}
 
 		// Assign validation errors
-		foreach ($errors as $error)
-		{
+		foreach ($errors as $error) {
 			$this->template->assign_block_vars('VALIDATION_ERRORS', [
 				'MESSAGE' => $error['message']
 			]);
@@ -299,8 +292,7 @@ class hcaptcha extends captcha_abstract
 	 */
 	public function get_template()
 	{
-		if ($this->is_solved())
-		{
+		if ($this->is_solved()) {
 			return false;
 		}
 
@@ -332,8 +324,7 @@ class hcaptcha extends captcha_abstract
 	 */
 	public function validate()
 	{
-		if (!parent::validate())
-		{
+		if (!parent::validate()) {
 			return false;
 		}
 
@@ -349,14 +340,12 @@ class hcaptcha extends captcha_abstract
 	{
 		$result = $this->request->variable('h-captcha-response', '', true);
 
-		if (empty($result))
-		{
+		if (empty($result)) {
 			return $this->language->lang('HCAPTCHA_INCORRECT');
 		}
 
 		// Verify hCaptcha token
-		try
-		{
+		try {
 			$client = new GuzzleClient([
 				'base_uri' => 'https://hcaptcha.com',
 				'allow_redirects' => false
@@ -373,14 +362,11 @@ class hcaptcha extends captcha_abstract
 
 			$data = json_decode($response->getBody()->getContents());
 
-			if ($data->success === true)
-			{
+			if ($data->success === true) {
 				$this->solved = true;
 				return false;
 			}
-		}
-		catch (GuzzleException $ex)
-		{
+		} catch (GuzzleException $ex) {
 			return $this->language->lang('HCAPTCHA_REQUEST_EXCEPTION', $ex->getMessage());
 		};
 

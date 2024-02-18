@@ -2,7 +2,7 @@
 
 /**
  * hCaptcha extension for phpBB.
- * @author Alfredo Ramos <alfredo.ramos@skiff.com>
+ * @author Alfredo Ramos <alfredo.ramos@proton.me>
  * @copyright 2021 Alfredo Ramos
  * @license GPL-2.0-only
  */
@@ -34,8 +34,7 @@ class ext extends base
 	{
 		$parent_state = parent::enable_step($old_state);
 
-		if ($parent_state === false)
-		{
+		if ($parent_state === false) {
 			$this->handle_hcaptcha('enable');
 		}
 
@@ -51,8 +50,7 @@ class ext extends base
 	 */
 	public function disable_step($old_state)
 	{
-		switch ($old_state)
-		{
+		switch ($old_state) {
 			case '':
 				$state = $this->handle_hcaptcha('disable');
 				break;
@@ -74,8 +72,7 @@ class ext extends base
 	 */
 	public function purge_step($old_state)
 	{
-		switch ($old_state)
-		{
+		switch ($old_state) {
 			case '':
 				$state = $this->handle_hcaptcha('purge');
 				break;
@@ -97,8 +94,7 @@ class ext extends base
 	 */
 	private function handle_hcaptcha($step = '')
 	{
-		if (empty($step))
-		{
+		if (empty($step)) {
 			return false;
 		}
 
@@ -106,19 +102,17 @@ class ext extends base
 		$fallback_service = 'core.captcha.plugins.gd';
 		$hcaptcha_service = 'alfredoramos.hcaptcha.captcha.hcaptcha';
 
-		switch ($step)
-		{
+		switch ($step) {
 			case 'enable':
 				$old_captcha = !empty($config['old_captcha_plugin']) ? $config['old_captcha_plugin'] : $fallback_service;
 				$current_captcha = $config['captcha_plugin'];
 
 				$config->set('old_captcha_plugin', $current_captcha);
 
-				if ($old_captcha === $hcaptcha_service)
-				{
+				if ($old_captcha === $hcaptcha_service) {
 					$config->set('captcha_plugin', $hcaptcha_service);
 				}
-			break;
+				break;
 
 			case 'disable':
 				$old_captcha = !empty($config['old_captcha_plugin']) ? $config['old_captcha_plugin'] : $fallback_service;
@@ -127,15 +121,14 @@ class ext extends base
 
 				$config->set('old_captcha_plugin', $current_captcha);
 
-				if ($current_captcha === $hcaptcha_service)
-				{
+				if ($current_captcha === $hcaptcha_service) {
 					$config->set('captcha_plugin', $old_captcha);
 				}
-			break;
+				break;
 
 			case 'purge':
 				$config->delete('old_captcha_plugin');
-			break;
+				break;
 		}
 
 		return 'hcaptcha_handled';
