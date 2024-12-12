@@ -119,12 +119,13 @@ jobs:
           --health-cmd="mysqladmin ping"
           --health-interval=10s
           --health-timeout=5s
-          --health-retries=3
+          --health-retries=5
     env:
       DB: ${{ matrix.db-type }}
       MYISAM: 0
       PHP_VERSION: ${{ matrix.php-version }}
     strategy:
+      fail-fast: false
       matrix:
         include:
           - php-version: '7.2'
@@ -151,6 +152,12 @@ jobs:
           - php-version: '8.2'
             db-type: 'mariadb'
             db-version: '10.6'
+          - php-version: '8.3'
+            db-type: 'mariadb'
+            db-version: '10.11'
+          - php-version: '8.4'
+            db-type: 'mariadb'
+            db-version: '10.11'
     steps:
       - name: Checkout phpBB
         uses: actions/checkout@v4
@@ -237,7 +244,7 @@ jobs:
           --health-cmd="pg_isready"
           --health-interval=10s
           --health-timeout=5s
-          --health-retries=3
+          --health-retries=5
     env:
       DB: ${{ matrix.db-type }}
       MYISAM: 0
@@ -247,10 +254,10 @@ jobs:
         include:
           - php-version: '7.2'
             db-type: 'postgres'
-            db-version: '15-alpine'
-          - php-version: '8.2'
-            db-type: 'postgres'
             db-version: '16-alpine'
+          - php-version: '8.4'
+            db-type: 'postgres'
+            db-version: '17-alpine'
     steps:
       - name: Checkout phpBB
         uses: actions/checkout@v4
