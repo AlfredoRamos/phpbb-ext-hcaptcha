@@ -5,31 +5,71 @@
  * @license GPL-2.0-only
  */
 
-(function () {
+(() => {
 	'use strict';
 
-	// Toggle hCaptcha secret key
-	document.body.addEventListener('click', function (e) {
-		const toggle = e.target.closest('#toggle-hcaptcha-secret');
+	const debounce = (callback, wait) => {
+		let timeout = null;
 
-		if (!toggle) {
+		return (...args) => {
+			clearTimeout(timeout);
+			timeout = setTimeout(() => callback?.apply(this, args), wait);
+		};
+	};
+
+	const widget = document.body.querySelector('#h-captcha-preview');
+	const loadPreview = debounce(() => {
+		if (!widget) {
 			return;
 		}
 
-		const field = document.body.querySelector('#hcaptcha-secret');
-		const icon = toggle.querySelector('.icon');
+		widget.innerHTML = '';
+		window.hcaptcha.render('h-captcha-preview', {
+			sitekey: widget.getAttribute('data-sitekey'),
+			theme: widget.getAttribute('data-theme'),
+			size: widget.getAttribute('data-size'),
+		});
+	}, 250);
 
-		if (!field || !icon) {
-			return;
-		}
+	document.body
+		.querySelector('#toggle-hcaptcha-secret')
+		?.addEventListener('click', (e) => {
+			const toggle = e.target.closest('#toggle-hcaptcha-secret');
 
-		const isHidden = field.getAttribute('type').trim() === 'password';
+			if (!toggle) {
+				return;
+			}
 
-		// Toggle field type
-		field.setAttribute('type', isHidden ? 'text' : 'password');
+			const field = document.body.querySelector('#hcaptcha-secret');
+			const icon = toggle?.querySelector('.icon');
 
-		// Toggle icon
-		icon.classList.toggle('fa-eye-slash', isHidden);
-		icon.classList.toggle('fa-eye', !isHidden);
-	});
+			if (!field || !icon) {
+				return;
+			}
+
+			const isHidden = field.getAttribute('type').trim() === 'password';
+			field.setAttribute('type', isHidden ? 'text' : 'password');
+			icon.classList.toggle('fa-eye-slash', isHidden);
+			icon.classList.toggle('fa-eye', !isHidden);
+		});
+
+	document.body
+		.querySelectorAll('#hcaptcha-theme,#hcaptcha-size')
+		?.forEach((elem) => {
+			if (!widget) {
+				return;
+			}
+
+			elem?.addEventListener('change', (e) => {
+				const attr = (e.target?.id ?? '')?.replace('hcaptcha', 'data');
+				const value = e.target.value;
+
+				if (!widget?.hasAttribute(attr) || !value) {
+					return;
+				}
+
+				widget.setAttribute(attr, value);
+				loadPreview();
+			});
+		});
 })();
