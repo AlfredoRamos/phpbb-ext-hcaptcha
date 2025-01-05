@@ -28,7 +28,8 @@ trait functional_test_case_trait
 			'hcaptcha_secret' => '0x0000000000000000000000000000000000000000'
 		];
 
-		foreach ($config_ary as $key => $value) {
+		foreach ($config_ary as $key => $value)
+		{
 			$key = trim($key);
 			$value = trim($value);
 

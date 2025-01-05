@@ -9,9 +9,9 @@
 	<dl>
 		<dt>&nbsp;</dt>
 		<dd>
-			<div class="h-captcha" data-sitekey="{{ HCAPTCHA_KEY }}"{% if HCAPTCHA_THEME %} data-theme="{{ HCAPTCHA_THEME }}"{% endif %}{% if HCAPTCHA_SIZE %} data-size="{{ HCAPTCHA_SIZE }}"{% endif %}></div>
+			<div id="h-captcha-preview" class="h-captcha" data-sitekey="{{ HCAPTCHA_KEY }}"{% if HCAPTCHA_THEME %} data-theme="{{ HCAPTCHA_THEME }}"{% endif %}{% if HCAPTCHA_SIZE %} data-size="{{ HCAPTCHA_SIZE }}"{% endif %}></div>
 		</dd>
 	</dl>
 {% else %}
-	<div class="errorbox"><p>{{ lang('HCAPTCHA_NOT_AVAILABLE') }}</p></div>
+	<div class="errorbox notice"><p>{{ lang('HCAPTCHA_NOT_AVAILABLE') }}</p></div>
 {% endif %}

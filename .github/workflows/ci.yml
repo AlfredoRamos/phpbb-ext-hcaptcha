@@ -21,6 +21,7 @@ jobs:
     env:
       PHP_VERSION: ${{ matrix.php-version }}
     strategy:
+      fail-fast: false
       matrix:
         php-version: ['7.2']
     steps:
@@ -250,6 +251,7 @@ jobs:
       MYISAM: 0
       PHP_VERSION: ${{ matrix.php-version }}
     strategy:
+      fail-fast: false
       matrix:
         include:
           - php-version: '7.2'

@@ -17,11 +17,17 @@ use phpbb\template\template;
 use phpbb\language\language;
 use phpbb\log\log;
 use alfredoramos\hcaptcha\includes\helper;
-use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 
 class hcaptcha extends captcha_abstract
 {
+	/** @var string */
+	private const SCRIPT_URL = 'https://js.hcaptcha.com/1/api.js';
+
+	/** @var string */
+	private const VERIFY_ENDPOINT = 'https://hcaptcha.com/siteverify';
+
 	/** @var config */
 	protected $config;
 
@@ -48,6 +54,12 @@ class hcaptcha extends captcha_abstract
 
 	/** @var string */
 	protected $php_ext;
+
+	/** @var array */
+	protected $supported_values = [
+		'theme' => ['light', 'dark'],
+		'size' => ['normal', 'compact']
+	];
 
 	/**
 	 * Constructor of hCaptcha plugin.
@@ -78,11 +90,7 @@ class hcaptcha extends captcha_abstract
 	}
 
 	/**
-	 * Initialize this CAPTCHA plugin.
-	 *
-	 * @param integer $type
-	 *
-	 * @return void
+	 * {@inheritDoc}
 	 */
 	public function init($type)
 	{
@@ -121,9 +129,7 @@ class hcaptcha extends captcha_abstract
 	}
 
 	/**
-	 * Get CAPTCHA plugin name.
-	 *
-	 * @return string
+	 * {@inheritDoc}
 	 */
 	public function get_name()
 	{
@@ -131,9 +137,7 @@ class hcaptcha extends captcha_abstract
 	}
 
 	/**
-	 * Indicator that this CAPTCHA plugin requires configuration.
-	 *
-	 * @return bool
+	 * {@inheritDoc}
 	 */
 	public function has_config()
 	{
@@ -141,23 +145,16 @@ class hcaptcha extends captcha_abstract
 	}
 
 	/**
-	 * Whether or not this CAPTCHA plugin is available and setup.
-	 *
-	 * @return bool
+	 * {@inheritDoc}
 	 */
 	public function is_available()
 	{
 		$this->language->add_lang('captcha/hcaptcha', 'alfredoramos/hcaptcha');
-		return (!empty($this->config['hcaptcha_key']) && !empty($this->config['hcaptcha_secret']));
+		return (!empty($this->config->offsetGet('hcaptcha_key')) && !empty($this->config->offsetGet('hcaptcha_secret')));
 	}
 
 	/**
-	 * Create the ACP page for configuring this CAPTCHA plugin.
-	 *
-	 * @param string		$id
-	 * @param \acp_captcha	$module
-	 *
-	 * @return void
+	 * {@inheritDoc}
 	 */
 	public function acp_page($id, $module)
 	{
@@ -166,12 +163,6 @@ class hcaptcha extends captcha_abstract
 
 		$form_key = 'acp_captcha';
 		add_form_key($form_key);
-
-		// Allowed values
-		$allowed = [
-			'theme'	=> ['light', 'dark'],
-			'size'	=> ['normal', 'compact']
-		];
 
 		// Validation errors
 		$errors = [];
@@ -193,20 +184,22 @@ class hcaptcha extends captcha_abstract
 			'hcaptcha_theme' => [
 				'filter' => FILTER_VALIDATE_REGEXP,
 				'options' => [
-					'regexp' => '#^(?:' . implode('|', $allowed['theme']) . ')?$#'
+					'regexp' => '#^(?:' . implode('|', $this->supported_values['theme']) . ')?$#'
 				]
 			],
 			'hcaptcha_size' => [
 				'filter' => FILTER_VALIDATE_REGEXP,
 				'options' => [
-					'regexp' => '#^(?:' . implode('|', $allowed['size']) . ')?$#'
+					'regexp' => '#^(?:' . implode('|', $this->supported_values['size']) . ')?$#'
 				]
 			]
 		];
 
 		// Request form data
-		if ($this->request->is_set_post('submit')) {
-			if (!check_form_key($form_key)) {
+		if ($this->request->is_set_post('submit'))
+		{
+			if (!check_form_key($form_key))
+			{
 				trigger_error($this->language->lang('FORM_INVALID') . adm_back_link($module->u_action), E_USER_WARNING);
 			}
 
@@ -214,14 +207,16 @@ class hcaptcha extends captcha_abstract
 			$fields = [
 				'hcaptcha_key' => $this->request->variable('hcaptcha_key', ''),
 				'hcaptcha_secret' => $this->request->variable('hcaptcha_secret', ''),
-				'hcaptcha_theme' => $this->request->variable('hcaptcha_theme', ''),
-				'hcaptcha_size' => $this->request->variable('hcaptcha_size', '')
+				'hcaptcha_theme' => $this->request->variable('hcaptcha_theme', $this->supported_values['theme'][0]),
+				'hcaptcha_size' => $this->request->variable('hcaptcha_size', $this->supported_values['size'][0])
 			];
 
 			// Validation check
-			if ($this->helper->validate($fields, $filters, $errors)) {
+			if ($this->helper->validate($fields, $filters, $errors))
+			{
 				// Save configuration
-				foreach ($fields as $key => $value) {
+				foreach ($fields as $key => $value)
+				{
 					$this->config->set($key, $value);
 				}
 
@@ -240,17 +235,19 @@ class hcaptcha extends captcha_abstract
 			'CAPTCHA_NAME'		=> $this->get_service_name(),
 			'CAPTCHA_PREVIEW'	=> $this->get_demo_template($id),
 
-			'HCAPTCHA_KEY'		=> $this->config['hcaptcha_key'],
-			'HCAPTCHA_SECRET'	=> $this->config['hcaptcha_secret'],
+			'HCAPTCHA_KEY'		=> $this->config->offsetGet('hcaptcha_key'),
+			'HCAPTCHA_SECRET'	=> $this->config->offsetGet('hcaptcha_secret'),
 
 			'S_HCAPTCHA_SETTINGS' => true
 		]);
 
 		// Assign allowed values
-		foreach ($allowed as $key => $value) {
+		foreach ($this->supported_values as $key => $value)
+		{
 			$block_var = sprintf('HCAPTCHA_%s_LIST', strtoupper($key));
 
-			foreach ($value as $val) {
+			foreach ($value as $val)
+			{
 				$this->template->assign_block_vars($block_var, [
 					'KEY' => $val,
 					'NAME' => $this->language->lang(sprintf(
@@ -258,13 +255,14 @@ class hcaptcha extends captcha_abstract
 						strtoupper($key),
 						strtoupper($val)
 					)),
-					'ENABLED' => ($this->config[sprintf('hcaptcha_%s', $key)] === $val)
+					'ENABLED' => ($this->config->offsetGet(sprintf('hcaptcha_%s', $key)) === $val)
 				]);
 			}
 		}
 
 		// Assign validation errors
-		foreach ($errors as $error) {
+		foreach ($errors as $error)
+		{
 			$this->template->assign_block_vars('VALIDATION_ERRORS', [
 				'MESSAGE' => $error['message']
 			]);
@@ -272,27 +270,12 @@ class hcaptcha extends captcha_abstract
 	}
 
 	/**
-	 * Create the ACP page for previewing this CAPTCHA plugin.
-	 *
-	 * @see get_template()
-	 *
-	 * @param string $id
-	 *
-	 * @return bool|string
-	 */
-	public function get_demo_template($id)
-	{
-		return $this->get_template();
-	}
-
-	/**
-	 * Get the template for this CAPTCHA plugin.
-	 *
-	 * @return bool|string False if CAPTCHA is already solved, template file name otherwise
+	 * {@inheritDoc}
 	 */
 	public function get_template()
 	{
-		if ($this->is_solved()) {
+		if ($this->is_solved())
+		{
 			return false;
 		}
 
@@ -302,10 +285,10 @@ class hcaptcha extends captcha_abstract
 		$this->template->assign_vars([
 			'CONFIRM_EXPLAIN'		=> $this->language->lang($explain, '<a href="' . $contact . '">', '</a>'),
 
-			'HCAPTCHA_KEY'			=> $this->config['hcaptcha_key'],
-			'HCAPTCHA_THEME'		=> $this->config['hcaptcha_theme'],
-			'HCAPTCHA_SIZE'			=> $this->config['hcaptcha_size'],
-			'U_HCAPTCHA_SCRIPT'		=> 'https://js.hcaptcha.com/1/api.js',
+			'HCAPTCHA_KEY'			=> $this->config->offsetGet('hcaptcha_key'),
+			'HCAPTCHA_THEME'		=> $this->config->offsetGet('hcaptcha_theme'),
+			'HCAPTCHA_SIZE'			=> $this->config->offsetGet('hcaptcha_size'),
+			'U_HCAPTCHA_SCRIPT'		=> self::SCRIPT_URL,
 			'S_HCAPTCHA_AVAILABLE'	=> $this->is_available(),
 
 			'S_CONFIRM_CODE'		=> true,
@@ -316,45 +299,62 @@ class hcaptcha extends captcha_abstract
 	}
 
 	/**
-	 * Validate the user's input.
-	 *
-	 * @see hcaptcha_verify_token()
-	 *
-	 * @return bool|string
+	 * {@inheritDoc}
 	 */
-	public function validate()
+	public function get_demo_template($id)
 	{
-		if (!parent::validate()) {
-			return false;
-		}
+		$this->template->assign_vars([
+			'HCAPTCHA_KEY'			=> $this->config->offsetGet('hcaptcha_key'),
+			'HCAPTCHA_THEME'		=> $this->config->offsetGet('hcaptcha_theme'),
+			'HCAPTCHA_SIZE'			=> $this->config->offsetGet('hcaptcha_size'),
+			'U_HCAPTCHA_SCRIPT'		=> self::SCRIPT_URL,
+			'S_HCAPTCHA_AVAILABLE'	=> $this->is_available(),
+		]);
 
-		return $this->hcaptcha_verify_token();
+		return '@alfredoramos_hcaptcha/captcha_hcaptcha_demo.html';
 	}
 
 	/**
-	 * Validate the token returned by hCaptcha.
+	 * Get Guzzle client
 	 *
-	 * @return bool|string False on success, string containing the error otherwise
+	 * @return Client
 	 */
-	protected function hcaptcha_verify_token()
+	protected function get_client()
 	{
+		if (!isset($this->client))
+		{
+			$this->client = new Client(['allow_redirects' => false]);
+		}
+
+		return $this->client;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function validate()
+	{
+		if (!parent::validate())
+		{
+			return false;
+		}
+
 		$result = $this->request->variable('h-captcha-response', '', true);
 
-		if (empty($result)) {
+		if (empty($result))
+		{
 			return $this->language->lang('HCAPTCHA_INCORRECT');
 		}
 
 		// Verify hCaptcha token
-		try {
-			$client = new GuzzleClient([
-				'base_uri' => 'https://hcaptcha.com',
-				'allow_redirects' => false
-			]);
+		try
+		{
+			$client = $this->get_client();
 
-			$response = $client->request('POST', '/siteverify', [
+			$response = $client->request('POST', self::VERIFY_ENDPOINT, [
 				'form_params' => [
-					'sitekey'	=> $this->config['hcaptcha_key'],
-					'secret'	=> $this->config['hcaptcha_secret'],
+					'sitekey'	=> $this->config->offsetGet('hcaptcha_key'),
+					'secret'	=> $this->config->offsetGet('hcaptcha_secret'),
 					'response'	=> $result,
 					'remoteip'	=> $this->user->ip
 				]
@@ -362,11 +362,14 @@ class hcaptcha extends captcha_abstract
 
 			$data = json_decode($response->getBody()->getContents());
 
-			if ($data->success === true) {
+			if ($data->success === true)
+			{
 				$this->solved = true;
 				return false;
 			}
-		} catch (GuzzleException $ex) {
+		}
+		catch (GuzzleException $ex)
+		{
 			return $this->language->lang('HCAPTCHA_REQUEST_EXCEPTION', $ex->getMessage());
 		};
 
