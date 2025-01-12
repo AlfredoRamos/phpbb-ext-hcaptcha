@@ -233,7 +233,6 @@ class hcaptcha extends captcha_abstract
 		// Assign template variables
 		$this->template->assign_vars([
 			'U_ACTION'			=> $module->u_action,
-			'PREVIEW'			=> true,
 
 			'HCAPTCHA_KEY'		=> $this->config->offsetGet('hcaptcha_key'),
 			'HCAPTCHA_SECRET'	=> $this->config->offsetGet('hcaptcha_secret'),
