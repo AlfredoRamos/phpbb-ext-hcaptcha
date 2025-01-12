@@ -11,13 +11,13 @@ env:
   IMAGE_ICC: 1
   EPV: 1
   EXECUTABLE_FILES: 1
-  PHPBB_BRANCH: 3.3.x
+  PHPBB_BRANCH: master
 
 jobs:
   basic-tests:
     if: ${{ !contains(github.event.head_commit.message, 'skip ci') }}
     name: php ${{ matrix.php-version }}, none none
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     env:
       PHP_VERSION: ${{ matrix.php-version }}
     strategy:
@@ -82,7 +82,7 @@ jobs:
       - name: Setup EPV
         if: ${{ env.EPV == 1 }}
         working-directory: phpBB3/phpBB
-        run: composer require -n --prefer-dist --no-progress phpbb/epv:dev-master
+        run: composer require -n --prefer-dist --no-progress --with-all-dependencies phpbb/epv:dev-master
 
       - name: Run code sniffer
         if: ${{ env.SNIFF == 1 }}
@@ -107,7 +107,7 @@ jobs:
   mysql-tests:
     if: ${{ !contains(github.event.head_commit.message, 'skip ci') }}
     name: php ${{ matrix.php-version }}, ${{ matrix.db-type }} ${{ matrix.db-version }}
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     services:
       mysql:
         image: ${{ (matrix.db-type == 'mysql' || matrix.db-type == 'mariadb') && matrix.db-type || 'mariadb' }}:${{ (matrix.db-type == 'mysql' || matrix.db-type == 'mariadb' && matrix.db-version != 'none') && matrix.db-version || 'latest' }}
@@ -216,7 +216,7 @@ jobs:
   postgresql-tests:
     if: ${{ !contains(github.event.head_commit.message, 'skip ci') }}
     name: php ${{ matrix.php-version }}, ${{ matrix.db-type }} ${{ matrix.db-version }}
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     services:
       postgres:
         image: ${{ (matrix.db-type == 'postgres') && matrix.db-type || 'postgres' }}:${{ (matrix.db-type == 'postgres' && matrix.db-version != 'none') && matrix.db-version || 'alpine' }}
