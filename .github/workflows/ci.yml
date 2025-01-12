@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches: [master]
-  pull_request:
+  pull_request: {}
 
 env:
   EXTNAME: 'alfredoramos/hcaptcha'
@@ -11,19 +11,21 @@ env:
   IMAGE_ICC: 1
   EPV: 1
   EXECUTABLE_FILES: 1
-  PHPBB_BRANCH: 3.3.x
+  PHPBB_BRANCH: master
 
 jobs:
   basic-tests:
     if: ${{ !contains(github.event.head_commit.message, 'skip ci') }}
     name: php ${{ matrix.php-version }}, none none
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.experimental }} # TODO: Remove
     env:
       PHP_VERSION: ${{ matrix.php-version }}
     strategy:
       fail-fast: false
       matrix:
-        php-version: ['7.2']
+        php-version: ['8.1']
+        experimental: [true] # TODO: Remove
     steps:
       - name: Checkout phpBB
         uses: actions/checkout@v4
@@ -71,7 +73,7 @@ jobs:
 
       - name: Install Node dependencies
         working-directory: extension
-        run: npm install
+        run: npm ci
 
       - name: Setup extension
         working-directory: extension
@@ -81,33 +83,38 @@ jobs:
 
       - name: Setup EPV
         if: ${{ env.EPV == 1 }}
+        continue-on-error: ${{ matrix.experimental }} # TODO: Remove
         working-directory: phpBB3/phpBB
         run: composer require -n --prefer-dist --no-progress phpbb/epv:dev-master
 
       - name: Run code sniffer
         if: ${{ env.SNIFF == 1 }}
+        continue-on-error: ${{ matrix.experimental }} # TODO: Remove
         working-directory: phpBB3
         run: .github/ext-sniff.sh $EXTNAME $NOTESTS
 
       - name: Check image ICC profiles
         if: ${{ env.IMAGE_ICC == 1 }}
+        continue-on-error: ${{ matrix.experimental }} # TODO: Remove
         working-directory: phpBB3
         run: .github/check-image-icc-profiles.sh
 
       - name: Check executable files
         if: ${{ env.EXECUTABLE_FILES == 1 }}
+        continue-on-error: ${{ matrix.experimental }} # TODO: Remove
         working-directory: phpBB3
         run: .github/ext-check-executable-files.sh ./ $EXTNAME
 
       - name: Run EPV
         if: ${{ env.EPV == 1 }}
+        continue-on-error: ${{ matrix.experimental }} # TODO: Remove
         working-directory: phpBB3
         run: phpBB/vendor/bin/EPV.php run --dir="phpBB/ext/$EXTNAME"
 
   mysql-tests:
     if: ${{ !contains(github.event.head_commit.message, 'skip ci') }}
     name: php ${{ matrix.php-version }}, ${{ matrix.db-type }} ${{ matrix.db-version }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     services:
       mysql:
         image: ${{ (matrix.db-type == 'mysql' || matrix.db-type == 'mariadb') && matrix.db-type || 'mariadb' }}:${{ (matrix.db-type == 'mysql' || matrix.db-type == 'mariadb' && matrix.db-version != 'none') && matrix.db-version || 'latest' }}
@@ -128,25 +135,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        experimental: [false] # TODO: Remove
         include:
-          - php-version: '7.2'
-            db-type: 'mysql'
-            db-version: '5.7'
-          - php-version: '7.2'
-            db-type: 'mariadb'
-            db-version: '10.5'
-          - php-version: '7.3'
-            db-type: 'mariadb'
-            db-version: '10.5'
-          - php-version: '7.4'
-            db-type: 'mysql'
-            db-version: '8.0'
-          - php-version: '7.4'
-            db-type: 'mariadb'
-            db-version: '10.5'
-          - php-version: '8.0'
-            db-type: 'mariadb'
-            db-version: '10.5'
           - php-version: '8.1'
             db-type: 'mariadb'
             db-version: '10.6'
@@ -159,6 +149,7 @@ jobs:
           - php-version: '8.4'
             db-type: 'mariadb'
             db-version: '10.11'
+            experimental: true # TODO: Remove
     steps:
       - name: Checkout phpBB
         uses: actions/checkout@v4
@@ -206,7 +197,7 @@ jobs:
 
       - name: Install Node dependencies
         working-directory: extension
-        run: npm install
+        run: npm ci
 
       - name: Setup extension
         working-directory: extension
@@ -225,13 +216,14 @@ jobs:
           cp -a .github/phpunit* phpBB/ext/$EXTNAME/ci/
 
       - name: Run unit tests
+        continue-on-error: ${{ matrix.experimental }} # TODO: Remove
         working-directory: phpBB3
         run: phpBB/vendor/bin/phpunit --configuration phpBB/ext/$EXTNAME/ci/phpunit-$DB-github.xml --bootstrap tests/bootstrap.php
 
   postgresql-tests:
     if: ${{ !contains(github.event.head_commit.message, 'skip ci') }}
     name: php ${{ matrix.php-version }}, ${{ matrix.db-type }} ${{ matrix.db-version }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     services:
       postgres:
         image: ${{ (matrix.db-type == 'postgres') && matrix.db-type || 'postgres' }}:${{ (matrix.db-type == 'postgres' && matrix.db-version != 'none') && matrix.db-version || 'alpine' }}
@@ -253,13 +245,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        experimental: [false] # TODO: Remove
         include:
-          - php-version: '7.2'
+          - php-version: '8.3'
             db-type: 'postgres'
-            db-version: '16-alpine'
+            db-version: '17-alpine'
           - php-version: '8.4'
             db-type: 'postgres'
             db-version: '17-alpine'
+            experimental: true # TODO: Remove
     steps:
       - name: Checkout phpBB
         uses: actions/checkout@v4
@@ -307,7 +301,7 @@ jobs:
 
       - name: Install Node dependencies
         working-directory: extension
-        run: npm install
+        run: npm ci
 
       - name: Setup extension
         working-directory: extension
@@ -326,6 +320,7 @@ jobs:
           cp -a .github/phpunit* phpBB/ext/$EXTNAME/ci/
 
       - name: Run unit tests
+        continue-on-error: ${{ matrix.experimental }} # TODO: Remove
         working-directory: phpBB3
         run: phpBB/vendor/bin/phpunit --configuration phpBB/ext/$EXTNAME/ci/phpunit-$DB-github.xml --bootstrap tests/bootstrap.php
 
@@ -347,7 +342,7 @@ jobs:
 
       - name: Install Node dependencies
         working-directory: extension
-        run: npm install
+        run: npm ci
 
       - name: Test SCSS
         working-directory: extension
