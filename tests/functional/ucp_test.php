@@ -26,11 +26,9 @@ class ucp_test extends \phpbb_functional_test_case
 	public function test_register_captcha()
 	{
 		$crawler = self::request('GET', 'ucp.php?mode=register');
-
 		$form = $crawler->selectButton('agreed')->form();
 
 		$crawler = self::submit($form);
-
 		$container = $crawler->filter('.hcaptcha-container');
 		$this->assertSame(1, $container->count());
 

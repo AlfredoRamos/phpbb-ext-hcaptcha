@@ -4,6 +4,7 @@
  * @copyright 2021 Alfredo Ramos
  * @license GPL-2.0-only
  */
-
-// Base
-@import '../../../../components/acp';
+.hcaptcha-error {
+	background-color: #f3cbca;
+	color: #d9534f;
+}
