@@ -15,9 +15,9 @@ use phpbb\user;
 use phpbb\request\request;
 use phpbb\template\template;
 use phpbb\language\language;
-use phpbb\log\log;
+use phpbb\log\log_interface;
 use alfredoramos\hcaptcha\includes\helper;
-use GuzzleHttp\Client;
+use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\GuzzleException;
 
 class hcaptcha extends captcha_abstract
@@ -43,11 +43,14 @@ class hcaptcha extends captcha_abstract
 	/** @var language */
 	protected $language;
 
-	/** @var log */
+	/** @var log_interface */
 	protected $log;
 
 	/** @var helper */
 	protected $helper;
+
+	/** @var GuzzleClient */
+	protected $client;
 
 	/** @var string */
 	protected $root_path;
@@ -64,19 +67,19 @@ class hcaptcha extends captcha_abstract
 	/**
 	 * Constructor of hCaptcha plugin.
 	 *
-	 * @param config	$config
-	 * @param user		$user
-	 * @param request	$request
-	 * @param template	$template
-	 * @param language	$language
-	 * @param log		$log
-	 * @param helper	$helper
-	 * @param string	$root_path
-	 * @param string	$php_ext
+	 * @param config		$config
+	 * @param user			$user
+	 * @param request		$request
+	 * @param template		$template
+	 * @param language		$language
+	 * @param log_interface	$log
+	 * @param helper		$helper
+	 * @param string		$root_path
+	 * @param string		$php_ext
 	 *
 	 * @return void
 	 */
-	public function __construct(config $config, user $user, request $request, template $template, language $language, log $log, helper $helper, $root_path, $php_ext)
+	public function __construct(config $config, user $user, request $request, template $template, language $language, log_interface $log, helper $helper, $root_path, $php_ext)
 	{
 		$this->config = $config;
 		$this->user = $user;
@@ -94,8 +97,8 @@ class hcaptcha extends captcha_abstract
 	 */
 	public function init($type)
 	{
-		$this->language->add_lang('captcha/hcaptcha', 'alfredoramos/hcaptcha');
 		parent::init($type);
+		$this->language->add_lang('captcha/hcaptcha', 'alfredoramos/hcaptcha');
 	}
 
 	/**
@@ -131,9 +134,11 @@ class hcaptcha extends captcha_abstract
 	/**
 	 * {@inheritDoc}
 	 */
-	public function get_name()
+	public function is_available()
 	{
-		return 'CAPTCHA_HCAPTCHA';
+		$this->language->add_lang('captcha/hcaptcha', 'alfredoramos/hcaptcha');
+		return !empty($this->config->offsetGet('hcaptcha_key'))
+			&& !empty($this->config->offsetGet('hcaptcha_secret'));
 	}
 
 	/**
@@ -147,10 +152,9 @@ class hcaptcha extends captcha_abstract
 	/**
 	 * {@inheritDoc}
 	 */
-	public function is_available()
+	public function get_name()
 	{
-		$this->language->add_lang('captcha/hcaptcha', 'alfredoramos/hcaptcha');
-		return (!empty($this->config->offsetGet('hcaptcha_key')) && !empty($this->config->offsetGet('hcaptcha_secret')));
+		return 'CAPTCHA_HCAPTCHA';
 	}
 
 	/**
@@ -220,10 +224,8 @@ class hcaptcha extends captcha_abstract
 					$this->config->set($key, $value);
 				}
 
-				// Admin log
-				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_CONFIG_VISUAL');
-
 				// Confirm dialog
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_CONFIG_VISUAL');
 				trigger_error($this->language->lang('CONFIG_UPDATED') . adm_back_link($module->u_action));
 			}
 		}
@@ -231,14 +233,15 @@ class hcaptcha extends captcha_abstract
 		// Assign template variables
 		$this->template->assign_vars([
 			'U_ACTION'			=> $module->u_action,
-
-			'CAPTCHA_NAME'		=> $this->get_service_name(),
-			'CAPTCHA_PREVIEW'	=> $this->get_demo_template($id),
+			'PREVIEW'			=> true,
 
 			'HCAPTCHA_KEY'		=> $this->config->offsetGet('hcaptcha_key'),
 			'HCAPTCHA_SECRET'	=> $this->config->offsetGet('hcaptcha_secret'),
 
-			'S_HCAPTCHA_SETTINGS' => true
+			'CAPTCHA_NAME'		=> $this->get_service_name(),
+			'CAPTCHA_PREVIEW'	=> $this->get_demo_template($id),
+
+			'S_HCAPTCHA_SETTINGS'	=> true
 		]);
 
 		// Assign allowed values
@@ -284,13 +287,11 @@ class hcaptcha extends captcha_abstract
 
 		$this->template->assign_vars([
 			'CONFIRM_EXPLAIN'		=> $this->language->lang($explain, '<a href="' . $contact . '">', '</a>'),
-
 			'HCAPTCHA_KEY'			=> $this->config->offsetGet('hcaptcha_key'),
 			'HCAPTCHA_THEME'		=> $this->config->offsetGet('hcaptcha_theme'),
 			'HCAPTCHA_SIZE'			=> $this->config->offsetGet('hcaptcha_size'),
 			'U_HCAPTCHA_SCRIPT'		=> self::SCRIPT_URL,
 			'S_HCAPTCHA_AVAILABLE'	=> $this->is_available(),
-
 			'S_CONFIRM_CODE'		=> true,
 			'S_TYPE'				=> $this->type
 		]);
@@ -317,13 +318,13 @@ class hcaptcha extends captcha_abstract
 	/**
 	 * Get Guzzle client
 	 *
-	 * @return Client
+	 * @return GuzzleClient
 	 */
 	protected function get_client()
 	{
 		if (!isset($this->client))
 		{
-			$this->client = new Client(['allow_redirects' => false]);
+			$this->client = new GuzzleClient(['allow_redirects' => false]);
 		}
 
 		return $this->client;

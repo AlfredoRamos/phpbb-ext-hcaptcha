@@ -7,21 +7,17 @@
 .hcaptcha-container {
 	margin: 1em auto;
 }
-
 .hcaptcha-error,
 .section-app\/contactadmin .hcaptcha-container .h-captcha,
 #register .hcaptcha-container .h-captcha {
 	text-align: center;
 }
-
 #login .hcaptcha-container .h-captcha {
 	margin-left: 16em;
 }
-
 #postform .hcaptcha-container .h-captcha {
 	margin-left: 15em;
 }
-
 .section-app\/contactadmin #postform .hcaptcha-container .h-captcha {
 	margin: 0;
 }

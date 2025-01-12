@@ -14,22 +14,16 @@ use phpbb\extension\base;
 class ext extends base
 {
 	/**
-	 * Check whether or not the extension can be enabled.
-	 *
-	 * @return bool
-	 */
+	* {@inheritdoc}
+	*/
 	public function is_enableable()
 	{
 		return phpbb_version_compare(PHPBB_VERSION, '3.3.0', '>=');
 	}
 
 	/**
-	 * Handle configuration values when enabling the extension.
-	 *
-	 * @param mixed $old_state
-	 *
-	 * @return bool
-	 */
+	* {@inheritdoc}
+	*/
 	public function enable_step($old_state)
 	{
 		$parent_state = parent::enable_step($old_state);
@@ -43,12 +37,8 @@ class ext extends base
 	}
 
 	/**
-	 * Handle configuration values when disabling the extension.
-	 *
-	 * @param mixed $old_state
-	 *
-	 * @return bool
-	 */
+	* {@inheritdoc}
+	*/
 	public function disable_step($old_state)
 	{
 		switch ($old_state)
@@ -66,12 +56,8 @@ class ext extends base
 	}
 
 	/**
-	 * Handle configuration values when purging the extension.
-	 *
-	 * @param mixed $old_state
-	 *
-	 * @return bool
-	 */
+	* {@inheritdoc}
+	*/
 	public function purge_step($old_state)
 	{
 		switch ($old_state)

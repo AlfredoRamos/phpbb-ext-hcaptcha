@@ -26,12 +26,9 @@ class acp_test extends \phpbb_functional_test_case
 
 	public function test_plugin_option()
 	{
-		$crawler = self::request('GET', sprintf(
-			'adm/index.php?i=acp_captcha&mode=visual&sid=%s&',
-			$this->sid
-		));
-
+		$crawler = self::request('GET', sprintf('adm/index.php?i=acp_captcha&mode=visual&sid=%s', $this->sid));
 		$form = $crawler->selectButton('configure')->form();
+
 		$this->assertTrue($form->has('select_captcha'));
 		$this->assertContains(
 			'alfredoramos.hcaptcha.captcha.hcaptcha',
@@ -39,9 +36,7 @@ class acp_test extends \phpbb_functional_test_case
 		);
 
 		$form->get('select_captcha')->select('alfredoramos.hcaptcha.captcha.hcaptcha');
-
 		$crawler = self::submit($form);
-
 		$form = $crawler->selectButton('submit')->form();
 
 		$this->assertTrue($form->has('hcaptcha_key'));
@@ -66,24 +61,20 @@ class acp_test extends \phpbb_functional_test_case
 
 		$crawler = self::submit($form, [
 			'hcaptcha_key' => '10000000-ffff-ffff-ffff-000000000001',
-			'hcaptcha_secret' => '0x0000000000000000000000000000000000000000'
+			'hcaptcha_secret' => '0x0000000000000000000000000000000000000000',
+			'hcaptcha_theme' => 'dark',
+			'hcaptcha_size' => 'compact'
 		]);
 
 		$this->assertSame(1, $crawler->filter('.successbox')->count());
 
-		$crawler = self::request('GET', sprintf(
-			'adm/index.php?i=acp_captcha&mode=visual&sid=%s&',
-			$this->sid
-		));
+		$crawler = self::request('GET', sprintf('adm/index.php?i=acp_captcha&mode=visual&sid=%s', $this->sid));
 
 		$form = $crawler->selectButton('main_submit')->form();
 		$form->get('select_captcha')->select('alfredoramos.hcaptcha.captcha.hcaptcha');
 		self::submit($form);
 
-		$crawler = self::request('GET', sprintf(
-			'adm/index.php?i=acp_captcha&mode=visual&sid=%s&',
-			$this->sid
-		));
+		$crawler = self::request('GET', sprintf('adm/index.php?i=acp_captcha&mode=visual&sid=%s', $this->sid));
 
 		$widget = $crawler->filter('.h-captcha');
 		$this->assertSame(1, $widget->count());
@@ -91,25 +82,20 @@ class acp_test extends \phpbb_functional_test_case
 			'10000000-ffff-ffff-ffff-000000000001',
 			$widget->attr('data-sitekey')
 		);
-		$this->assertSame(
-			1,
-			preg_match(
-				'#^[a-f0-9]{8}\-[a-f0-9]{4}\-[a-f0-9]{4}\-[a-f0-9]{4}\-[a-f0-9]{12}$#',
-				$widget->attr('data-sitekey')
-			)
-		);
+		$this->assertSame(1, preg_match(
+			'#^[a-f0-9]{8}\-[a-f0-9]{4}\-[a-f0-9]{4}\-[a-f0-9]{4}\-[a-f0-9]{12}$#',
+			$widget->attr('data-sitekey')
+		));
+		$this->assertSame('dark', $widget->attr('data-theme'));
+		$this->assertSame('compact', $widget->attr('data-size'));
 
 		$container = $crawler->filterXPath('//div[contains(@class, "h-captcha")]/ancestor::fieldset');
-
 		$script = $crawler->filterXPath('//script[contains(@src, "hcaptcha.com")]');
+		$noscript = $container->filter('noscript');
+
 		$this->assertSame(1, $script->count());
 		$this->assertSame('https://js.hcaptcha.com/1/api.js', $script->attr('src'));
-
-		$noscript = $container->filter('noscript');
 		$this->assertSame(1, $noscript->count());
-		$this->assertSame(
-			$this->lang('HCAPTCHA_NOSCRIPT'),
-			$noscript->filter('div')->text()
-		);
+		$this->assertSame($this->lang('HCAPTCHA_NOSCRIPT'), $noscript->filter('div')->text());
 	}
 }

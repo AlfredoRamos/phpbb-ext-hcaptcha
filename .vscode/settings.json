@@ -4,5 +4,11 @@
 	},
 	"[php]": {
 		"editor.formatOnSave": false
+	},
+	"[html]": {
+		"editor.formatOnSave": false
+	},
+	"[twig]": {
+		"editor.formatOnSave": false
 	}
 }

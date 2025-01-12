@@ -72,11 +72,8 @@
 
 	<fieldset>
 		<legend>{{ lang('PREVIEW') }}</legend>
-		{% if PREVIEW %}
-			<div class="successbox">
-				<h3>{{ lang('WARNING') }}</h3>
-				<p>{{ lang('CAPTCHA_PREVIEW_MSG') }}</p>
-			</div>
+		{% if S_HCAPTCHA_AVAILABLE %}
+		<div class="warningbox hidden"><strong>{{ lang('WARNING') }}</strong> {{ lang('CAPTCHA_PREVIEW_MSG') }}</div>
 		{% endif %}
 
 		{% include CAPTCHA_PREVIEW %}

@@ -1,0 +1,5 @@
+{% if S_HCAPTCHA_AVAILABLE and not INCLUDED_HCAPTCHA_CSS %}
+{% INCLUDECSS '@alfredoramos_hcaptcha/css/style.css' %}
+{% INCLUDECSS '@alfredoramos_hcaptcha/css/colors.css' %}
+{%- set INCLUDED_HCAPTCHA_CSS = true -%}
+{% endif %}

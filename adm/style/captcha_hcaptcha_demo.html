@@ -1,13 +1,9 @@
 {% if S_HCAPTCHA_AVAILABLE %}
-	{% if U_HCAPTCHA_SCRIPT and not INCLUDED_HCAPTCHA_JS %}
-		{% INCLUDEJS U_HCAPTCHA_SCRIPT %}
-		{%- set INCLUDED_HCAPTCHA_JS = true -%}
-	{% endif %}
 	<noscript>
 		<div class="errorbox"><p>{{ lang('HCAPTCHA_NOSCRIPT') }}</p></div>
 	</noscript>
 	<dl>
-		<dt>&nbsp;</dt>
+		<dt>{{ lang('CAPTCHA_PREVIEW_EXPLAIN') }}</dt>
 		<dd>
 			<div id="h-captcha-preview" class="h-captcha" data-sitekey="{{ HCAPTCHA_KEY }}"{% if HCAPTCHA_THEME %} data-theme="{{ HCAPTCHA_THEME }}"{% endif %}{% if HCAPTCHA_SIZE %} data-size="{{ HCAPTCHA_SIZE }}"{% endif %}></div>
 		</dd>

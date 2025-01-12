@@ -1,13 +1,5 @@
 <div class="hcaptcha-container">
 	{% if S_HCAPTCHA_AVAILABLE %}
-		{% if not INCLUDED_HCAPTCHA_CSS %}
-			{% INCLUDECSS '@alfredoramos_hcaptcha/css/hcaptcha.css' %}
-			{%- set INCLUDED_HCAPTCHA_CSS = true -%}
-		{% endif %}
-		{% if U_HCAPTCHA_SCRIPT and not INCLUDED_HCAPTCHA_JS %}
-			{% INCLUDEJS U_HCAPTCHA_SCRIPT %}
-			{%- set INCLUDED_HCAPTCHA_JS = true -%}
-		{% endif %}
 		<noscript>
 			<div class="hcaptcha-error">{{ lang('HCAPTCHA_NOSCRIPT') }}</div>
 		</noscript>
