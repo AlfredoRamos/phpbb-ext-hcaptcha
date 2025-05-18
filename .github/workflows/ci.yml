@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches: [master]
-  pull_request:
+  pull_request: {}
 
 env:
   EXTNAME: 'alfredoramos/hcaptcha'
@@ -71,7 +71,7 @@ jobs:
 
       - name: Install Node dependencies
         working-directory: extension
-        run: npm install
+        run: npm ci
 
       - name: Setup extension
         working-directory: extension
@@ -206,7 +206,7 @@ jobs:
 
       - name: Install Node dependencies
         working-directory: extension
-        run: npm install
+        run: npm ci
 
       - name: Setup extension
         working-directory: extension
@@ -307,7 +307,7 @@ jobs:
 
       - name: Install Node dependencies
         working-directory: extension
-        run: npm install
+        run: npm ci
 
       - name: Setup extension
         working-directory: extension
@@ -347,7 +347,7 @@ jobs:
 
       - name: Install Node dependencies
         working-directory: extension
-        run: npm install
+        run: npm ci
 
       - name: Test SCSS
         working-directory: extension
