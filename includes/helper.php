@@ -37,7 +37,7 @@ class helper
 	 *
 	 * @return bool
 	 */
-	public function validate(&$fields = [], &$filters = [], &$errors = [])
+	public function validate(array &$fields = [], array &$filters = [], array &$errors = []): bool
 	{
 		if (empty($fields) || empty($filters))
 		{
