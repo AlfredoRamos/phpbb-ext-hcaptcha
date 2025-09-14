@@ -79,7 +79,7 @@ class hcaptcha extends captcha_abstract
 	 *
 	 * @return void
 	 */
-	public function __construct(config $config, user $user, request $request, template $template, language $language, log_interface $log, helper $helper, $root_path, $php_ext)
+	public function __construct(config $config, user $user, request $request, template $template, language $language, log_interface $log, helper $helper, string $root_path, string $php_ext)
 	{
 		$this->config = $config;
 		$this->user = $user;
