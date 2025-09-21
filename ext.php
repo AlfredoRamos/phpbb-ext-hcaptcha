@@ -89,7 +89,7 @@ class ext extends base
 		}
 
 		$config = $this->container->get('config');
-		$fallback_service = 'core.captcha.plugins.gd';
+		$fallback_service = 'core.captcha.plugins.nogd';
 		$hcaptcha_service = 'alfredoramos.hcaptcha.captcha.hcaptcha';
 
 		switch ($step)
