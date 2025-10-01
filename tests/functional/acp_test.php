@@ -37,7 +37,7 @@ class acp_test extends \phpbb_functional_test_case
 
 		$form->get('select_captcha')->select('alfredoramos.hcaptcha.captcha.hcaptcha');
 
-		// TODO: Investigage why it does not work sending a POST request
+		// TODO: Investigate why it does not work sending a POST request
 		//  since that's what it does internally when changing the option with JS (onchange event)
 		// $crawler = self::submit($form);
 		// $crawler = self::request('POST', 'adm/index.php?i=acp_captcha&mode=visual', $form->getPhpValues());
