@@ -120,7 +120,7 @@ jobs:
           --health-cmd="mysqladmin ping"
           --health-interval=10s
           --health-timeout=5s
-          --health-retries=5
+          --health-retries=3
     env:
       DB: ${{ matrix.db-type }}
       MYISAM: 0
@@ -230,7 +230,7 @@ jobs:
           --health-cmd="pg_isready"
           --health-interval=10s
           --health-timeout=5s
-          --health-retries=5
+          --health-retries=3
     env:
       DB: ${{ matrix.db-type }}
       MYISAM: 0
