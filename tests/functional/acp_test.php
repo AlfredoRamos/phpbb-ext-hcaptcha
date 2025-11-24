@@ -26,8 +26,8 @@ class acp_test extends \phpbb_functional_test_case
 
 	public function test_plugin_option()
 	{
-		$crawler = self::request('GET', sprintf('adm/index.php?i=acp_captcha&mode=visual&sid=%s', $this->sid));
-		$form = $crawler->selectButton('configure')->form();
+		$crawler = self::request('GET', 'adm/index.php?i=acp_captcha&mode=visual&sid=' . $this->sid);
+		$form = $crawler->selectButton('main_submit')->form();
 
 		$this->assertTrue($form->has('select_captcha'));
 		$this->assertContains(
@@ -36,47 +36,57 @@ class acp_test extends \phpbb_functional_test_case
 		);
 
 		$form->get('select_captcha')->select('alfredoramos.hcaptcha.captcha.hcaptcha');
+
+		// TODO: Investigate why it does not work sending a POST request
+		//  since that's what it does internally when changing the option with JS (onchange event)
+		// $crawler = self::submit($form);
+		// $crawler = self::request('POST', 'adm/index.php?i=acp_captcha&mode=visual', $form->getPhpValues());
+		$this->init_hcaptcha();
+		$crawler = self::request('GET', 'adm/index.php?i=acp_captcha&mode=visual&sid=' . $this->sid);
+		$form = $crawler->selectButton('main_submit')->form();
+		$form->get('select_captcha')->select('alfredoramos.hcaptcha.captcha.hcaptcha');
+		$crawler = self::submit($form);
+
+		$this->assertSame(1, $crawler->filter('.successbox')->count());
+
+		$crawler = self::request('GET', 'adm/index.php?i=acp_captcha&mode=visual&sid=' . $this->sid);
+		$form = $crawler->selectButton('configure')->form();
+
+		$this->assertTrue($form->has('select_captcha'));
+		$this->assertContains(
+			'alfredoramos.hcaptcha.captcha.hcaptcha',
+			$form->get('select_captcha')->availableOptionValues()
+		);
+		$this->assertSame('alfredoramos.hcaptcha.captcha.hcaptcha', $form->get('select_captcha')->getValue());
+
 		$crawler = self::submit($form);
 		$form = $crawler->selectButton('submit')->form();
 
 		$this->assertTrue($form->has('hcaptcha_key'));
-		$this->assertSame('', $form->get('hcaptcha_key')->getValue());
+		$this->assertSame('10000000-ffff-ffff-ffff-000000000001', $form->get('hcaptcha_key')->getValue());
 
 		$this->assertTrue($form->has('hcaptcha_secret'));
-		$this->assertSame('', $form->get('hcaptcha_secret')->getValue());
+		$this->assertSame('0x0000000000000000000000000000000000000000', $form->get('hcaptcha_secret')->getValue());
 
 		$this->assertTrue($form->has('hcaptcha_theme'));
+		$this->assertSame(['light', 'dark'], $form->get('hcaptcha_theme')->availableOptionValues());
 		$this->assertSame('light', $form->get('hcaptcha_theme')->getValue());
-		$this->assertSame(
-			['light', 'dark'],
-			$form->get('hcaptcha_theme')->availableOptionValues()
-		);
 
 		$this->assertTrue($form->has('hcaptcha_size'));
+		$this->assertSame(['normal', 'compact'], $form->get('hcaptcha_size')->availableOptionValues());
 		$this->assertSame('normal', $form->get('hcaptcha_size')->getValue());
-		$this->assertSame(
-			['normal', 'compact'],
-			$form->get('hcaptcha_size')->availableOptionValues()
-		);
 
-		$crawler = self::submit($form, [
-			'hcaptcha_key' => '10000000-ffff-ffff-ffff-000000000001',
-			'hcaptcha_secret' => '0x0000000000000000000000000000000000000000',
+		$form->setValues([
 			'hcaptcha_theme' => 'dark',
 			'hcaptcha_size' => 'compact'
 		]);
+		$crawler = self::submit($form);
 
 		$this->assertSame(1, $crawler->filter('.successbox')->count());
 
-		$crawler = self::request('GET', sprintf('adm/index.php?i=acp_captcha&mode=visual&sid=%s', $this->sid));
-
-		$form = $crawler->selectButton('main_submit')->form();
-		$form->get('select_captcha')->select('alfredoramos.hcaptcha.captcha.hcaptcha');
-		self::submit($form);
-
-		$crawler = self::request('GET', sprintf('adm/index.php?i=acp_captcha&mode=visual&sid=%s', $this->sid));
-
+		$crawler = self::request('GET', 'adm/index.php?i=acp_captcha&mode=visual&sid=' . $this->sid);
 		$widget = $crawler->filter('.h-captcha');
+
 		$this->assertSame(1, $widget->count());
 		$this->assertSame(
 			'10000000-ffff-ffff-ffff-000000000001',
@@ -97,5 +107,21 @@ class acp_test extends \phpbb_functional_test_case
 		$this->assertSame('https://js.hcaptcha.com/1/api.js', $script->attr('src'));
 		$this->assertSame(1, $noscript->count());
 		$this->assertSame($this->lang('HCAPTCHA_NOSCRIPT'), $noscript->filter('div')->text());
+
+		$form = $crawler->selectButton('configure')->form();
+		$crawler = self::submit($form);
+		$form = $crawler->selectButton('submit')->form();
+
+		$this->assertTrue($form->has('hcaptcha_key'));
+		$this->assertSame('10000000-ffff-ffff-ffff-000000000001', $form->get('hcaptcha_key')->getValue());
+
+		$this->assertTrue($form->has('hcaptcha_secret'));
+		$this->assertSame('0x0000000000000000000000000000000000000000', $form->get('hcaptcha_secret')->getValue());
+
+		$this->assertTrue($form->has('hcaptcha_theme'));
+		$this->assertSame('dark', $form->get('hcaptcha_theme')->getValue());
+
+		$this->assertTrue($form->has('hcaptcha_size'));
+		$this->assertSame('compact', $form->get('hcaptcha_size')->getValue());
 	}
 }
