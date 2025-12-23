@@ -23,21 +23,14 @@ hCaptcha displays a checkbox similar to reCAPTCHA, but offers enhanced privacy, 
 
 ### Preview
 
-[![Spambot countermeasures](https://i.imgur.com/R4RcI3Qb.png)](https://i.imgur.com/R4RcI3Q.png)
-[![hCapcha configuration button](https://i.imgur.com/C1eI18wb.png)](https://i.imgur.com/C1eI18w.png)
-[![hCaptcha configuration](https://i.imgur.com/EmYYpkZb.png)](https://i.imgur.com/EmYYpkZ.png)
-[![hCaptcha plugin selection](https://i.imgur.com/iEkJYkKb.png)](https://i.imgur.com/iEkJYkK.png)
-[![Board registration preview](https://i.imgur.com/gZ3BSDRb.png)](https://i.imgur.com/gZ3BSDR.png)
-[![Board registration solving captcha](https://i.imgur.com/GgPNhdub.png)](https://i.imgur.com/GgPNhdu.png)
-[![hCaptcha with alternative theme and size](https://i.imgur.com/GIJUXfDb.png)](https://i.imgur.com/GIJUXfD.png)
-[![Integration with Contact Admin extension](https://i.imgur.com/OodqnUob.png)](https://i.imgur.com/OodqnUo.png)
+See the [full blog post](https://alfredoramos.mx/hcaptcha-extension-for-phpbb/) for the screenshots gallery.
 
 *(Click to view in full size)*
 
 ### Requirements
 
-- PHP 7.4.0 or greater
-- phpBB 3.3 or greater
+- PHP 8.2 or greater
+- phpBB 4.0 or greater
 - hCaptcha site key and account secret key
 
 ### Support
@@ -48,11 +41,7 @@ hCaptcha displays a checkbox similar to reCAPTCHA, but offers enhanced privacy, 
 
 ### Donate
 
-If you like or found my work useful and want to show some appreciation, you can consider supporting its development by giving a donation.
-
-|    [![Donate with PayPal](https://alfredoramos.mx/images/paypal.svg)](https://alfredoramos.mx/donate/)     |    [![Donate with Stripe](https://alfredoramos.mx/images/stripe.svg)](https://alfredoramos.mx/donate/)     |
-| :--------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------: |
-| [![Donate with PayPal](https://alfredoramos.mx/images/donate_paypal.svg)](https://alfredoramos.mx/donate/) | [![Donate with Stripe](https://alfredoramos.mx/images/donate_stripe.svg)](https://alfredoramos.mx/donate/) |
+If you like or found my work useful and want to show some appreciation, you can consider supporting its development by [**giving a donation**](https://alfredoramos.mx/donate/).
 
 ### Installation
 
