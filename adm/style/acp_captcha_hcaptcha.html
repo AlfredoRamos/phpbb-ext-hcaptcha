@@ -1,4 +1,4 @@
-{% include 'overall_header.html' %}
+{% include('overall_header.html') %}
 
 <a id="maincontent"></a>
 
@@ -34,7 +34,7 @@
 			<dd>
 				<input type="password" id="hcaptcha-secret" name="hcaptcha_secret" value="{{ HCAPTCHA_SECRET }}" required="required" autocomplete="off" class="medium">
 				<span id="toggle-hcaptcha-secret" title="{{ lang('ACP_HCAPTCHA_TOGGLE_SECRET', lang('HCAPTCHA_SECRET'))|striptags|escape('html_attr') }}">
-					<i class="icon acp-icon acp-icon-resync fa-eye fa-fw" aria-hidden="true"></i>
+					{{ Icon('font', 'eye', '', true, 'icon acp-icon acp-icon-resync') }}
 				</span>
 			</dd>
 		</dl>
@@ -76,7 +76,7 @@
 		<div class="warningbox hidden"><strong>{{ lang('WARNING') }}</strong> {{ lang('CAPTCHA_PREVIEW_MSG') }}</div>
 		{% endif %}
 
-		{% include CAPTCHA_PREVIEW %}
+		{% include(CAPTCHA_PREVIEW) %}
 	</fieldset>
 
 	<fieldset>
@@ -91,4 +91,4 @@
 	</fieldset>
 </form>
 
-{% include 'overall_footer.html' %}
+{% include('overall_footer.html') %}
