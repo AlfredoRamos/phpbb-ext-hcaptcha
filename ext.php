@@ -18,7 +18,7 @@ class ext extends base
 	*/
 	public function is_enableable()
 	{
-		return phpbb_version_compare(PHPBB_VERSION, '3.3.0', '>=');
+		return phpbb_version_compare(PHPBB_VERSION, '4.0.0-a1-dev', '>='); // TODO: Use stable version
 	}
 
 	/**
@@ -81,7 +81,7 @@ class ext extends base
 	 *
 	 * @return bool|string
 	 */
-	private function handle_hcaptcha($step = '')
+	private function handle_hcaptcha(string $step = ''): bool|string
 	{
 		if (empty($step))
 		{
@@ -89,7 +89,7 @@ class ext extends base
 		}
 
 		$config = $this->container->get('config');
-		$fallback_service = 'core.captcha.plugins.nogd';
+		$fallback_service = 'core.captcha.plugins.incomplete';
 		$hcaptcha_service = 'alfredoramos.hcaptcha.captcha.hcaptcha';
 
 		switch ($step)

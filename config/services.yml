@@ -8,14 +8,13 @@ services:
         class: alfredoramos\hcaptcha\captcha\plugins\hcaptcha
         arguments:
             - '@config'
-            - '@user'
-            - '@request'
-            - '@template'
+            - '@dbal.conn'
             - '@language'
             - '@log'
+            - '@request'
+            - '@template'
+            - '@user'
             - '@alfredoramos.hcaptcha.helper'
-            - '%core.root_path%'
-            - '%core.php_ext%'
         calls:
             - ['set_name', ['alfredoramos.hcaptcha.captcha.hcaptcha']]
         tags:

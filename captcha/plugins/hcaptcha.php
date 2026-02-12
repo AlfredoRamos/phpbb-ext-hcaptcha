@@ -9,18 +9,20 @@
 
 namespace alfredoramos\hcaptcha\captcha\plugins;
 
-use phpbb\captcha\plugins\captcha_abstract;
+use phpbb\captcha\plugins\base;
+use phpbb\captcha\plugins\confirm_type;
 use phpbb\config\config;
-use phpbb\user;
-use phpbb\request\request;
-use phpbb\template\template;
+use phpbb\db\driver\driver_interface;
 use phpbb\language\language;
 use phpbb\log\log_interface;
+use phpbb\request\request_interface;
+use phpbb\template\template;
+use phpbb\user;
 use alfredoramos\hcaptcha\includes\helper;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\GuzzleException;
 
-class hcaptcha extends captcha_abstract
+class hcaptcha extends base
 {
 	/** @var string */
 	private const SCRIPT_URL = 'https://js.hcaptcha.com/1/api.js';
@@ -28,38 +30,23 @@ class hcaptcha extends captcha_abstract
 	/** @var string */
 	private const VERIFY_ENDPOINT = 'https://hcaptcha.com/siteverify';
 
-	/** @var config */
-	protected $config;
-
-	/** @var user */
-	protected $user;
-
-	/** @var request */
-	protected $request;
-
 	/** @var template */
 	protected $template;
 
-	/** @var language */
-	protected $language;
-
 	/** @var log_interface */
-	protected $log;
+	protected log_interface $log;
 
 	/** @var helper */
-	protected $helper;
+	protected helper $helper;
 
 	/** @var GuzzleClient */
-	protected $client;
+	protected GuzzleClient $client;
 
 	/** @var string */
-	protected $root_path;
-
-	/** @var string */
-	protected $php_ext;
+	protected string $service_name = '';
 
 	/** @var array */
-	protected $supported_values = [
+	protected array $supported_values = [
 		'theme' => ['light', 'dark'],
 		'size' => ['normal', 'compact']
 	];
@@ -67,76 +54,42 @@ class hcaptcha extends captcha_abstract
 	/**
 	 * Constructor of hCaptcha plugin.
 	 *
-	 * @param config		$config
-	 * @param user			$user
-	 * @param request		$request
-	 * @param template		$template
-	 * @param language		$language
-	 * @param log_interface	$log
-	 * @param helper		$helper
-	 * @param string		$root_path
-	 * @param string		$php_ext
+	 * @param config			$config
+	 * @param driver_interface	$db
+	 * @param language			$language
+	 * @param log_interface		$log
+	 * @param request_interface	$request
+	 * @param template			$template
+	 * @param user				$user
+	 * @param helper			$helper
 	 *
 	 * @return void
 	 */
-	public function __construct(config $config, user $user, request $request, template $template, language $language, log_interface $log, helper $helper, string $root_path, string $php_ext)
+	public function __construct(config $config, driver_interface $db, language $language, log_interface $log, request_interface $request, template $template, user $user, helper $helper)
 	{
-		$this->config = $config;
-		$this->user = $user;
-		$this->request = $request;
+		parent::__construct($config, $db, $language, $request, $user);
+
 		$this->template = $template;
-		$this->language = $language;
 		$this->log = $log;
 		$this->helper = $helper;
-		$this->root_path = $root_path;
-		$this->php_ext = $php_ext;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function init($type)
+	public function init(confirm_type $type): void
 	{
 		parent::init($type);
 		$this->language->add_lang('captcha/hcaptcha', 'alfredoramos/hcaptcha');
 	}
 
 	/**
-	 * Not needed.
-	 *
-	 * @return void
-	 */
-	public function execute()
-	{
-	}
-
-	/**
-	 * Not needed.
-	 *
-	 * @return void
-	 */
-	public function execute_demo()
-	{
-	}
-
-	/**
-	 * Not needed.
-	 *
-	 * @throws \Exception
-	 *
-	 * @return void
-	 */
-	public function get_generator_class()
-	{
-		throw new \Exception('No generator class given.');
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
-	public function is_available()
+	public function is_available(): bool
 	{
-		$this->language->add_lang('captcha/hcaptcha', 'alfredoramos/hcaptcha');
+		$this->init($this->type);
+
 		return !empty($this->config->offsetGet('hcaptcha_key'))
 			&& !empty($this->config->offsetGet('hcaptcha_secret'));
 	}
@@ -144,7 +97,7 @@ class hcaptcha extends captcha_abstract
 	/**
 	 * {@inheritDoc}
 	 */
-	public function has_config()
+	public function has_config(): bool
 	{
 		return true;
 	}
@@ -152,7 +105,7 @@ class hcaptcha extends captcha_abstract
 	/**
 	 * {@inheritDoc}
 	 */
-	public function get_name()
+	public function get_name(): string
 	{
 		return 'CAPTCHA_HCAPTCHA';
 	}
@@ -160,7 +113,15 @@ class hcaptcha extends captcha_abstract
 	/**
 	 * {@inheritDoc}
 	 */
-	public function acp_page($id, $module)
+	public function set_name(string $name): void
+	{
+		$this->service_name = $name;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function acp_page(mixed $id, mixed $module): void
 	{
 		$module->tpl_name = '@alfredoramos_hcaptcha/acp_captcha_hcaptcha';
 		$module->page_title = 'ACP_VC_SETTINGS';
@@ -233,12 +194,13 @@ class hcaptcha extends captcha_abstract
 		// Assign template variables
 		$this->template->assign_vars([
 			'U_ACTION'			=> $module->u_action,
+			'PREVIEW'			=> true,
 
 			'HCAPTCHA_KEY'		=> $this->config->offsetGet('hcaptcha_key'),
 			'HCAPTCHA_SECRET'	=> $this->config->offsetGet('hcaptcha_secret'),
 
-			'CAPTCHA_NAME'		=> $this->get_service_name(),
-			'CAPTCHA_PREVIEW'	=> $this->get_demo_template($id),
+			'CAPTCHA_NAME'		=> $this->service_name,
+			'CAPTCHA_PREVIEW'	=> $this->get_demo_template(),
 
 			'S_HCAPTCHA_SETTINGS'	=> true
 		]);
@@ -274,25 +236,20 @@ class hcaptcha extends captcha_abstract
 	/**
 	 * {@inheritDoc}
 	 */
-	public function get_template()
+	public function get_template(): string
 	{
 		if ($this->is_solved())
 		{
-			return false;
+			return '';
 		}
 
-		$contact = phpbb_get_board_contact_link($this->config, $this->root_path, $this->php_ext);
-		$explain = $this->type !== CONFIRM_POST ? 'CONFIRM_EXPLAIN' : 'POST_CONFIRM_EXPLAIN';
-
 		$this->template->assign_vars([
-			'CONFIRM_EXPLAIN'		=> $this->language->lang($explain, '<a href="' . $contact . '">', '</a>'),
 			'HCAPTCHA_KEY'			=> $this->config->offsetGet('hcaptcha_key'),
 			'HCAPTCHA_THEME'		=> $this->config->offsetGet('hcaptcha_theme'),
 			'HCAPTCHA_SIZE'			=> $this->config->offsetGet('hcaptcha_size'),
 			'U_HCAPTCHA_SCRIPT'		=> self::SCRIPT_URL,
 			'S_HCAPTCHA_AVAILABLE'	=> $this->is_available(),
-			'S_CONFIRM_CODE'		=> true,
-			'S_TYPE'				=> $this->type
+			'S_TYPE'				=> $this->type->value
 		]);
 
 		return '@alfredoramos_hcaptcha/captcha_hcaptcha.html';
@@ -301,7 +258,7 @@ class hcaptcha extends captcha_abstract
 	/**
 	 * {@inheritDoc}
 	 */
-	public function get_demo_template($id)
+	public function get_demo_template(): string
 	{
 		$this->template->assign_vars([
 			'HCAPTCHA_KEY'			=> $this->config->offsetGet('hcaptcha_key'),
@@ -319,7 +276,7 @@ class hcaptcha extends captcha_abstract
 	 *
 	 * @return GuzzleClient
 	 */
-	protected function get_client()
+	protected function get_client(): GuzzleClient
 	{
 		if (!isset($this->client))
 		{
@@ -332,18 +289,21 @@ class hcaptcha extends captcha_abstract
 	/**
 	 * {@inheritDoc}
 	 */
-	public function validate()
+	public function validate(): bool
 	{
-		if (!parent::validate())
+		if (parent::validate())
 		{
-			return false;
+			return true;
 		}
 
 		$result = $this->request->variable('h-captcha-response', '', true);
 
 		if (empty($result))
 		{
-			return $this->language->lang('HCAPTCHA_INCORRECT');
+			$this->last_error = $this->language->lang('HCAPTCHA_INCORRECT');
+			$this->solved = false;
+			$this->confirm_code = '';
+			return false;
 		}
 
 		// Verify hCaptcha token
@@ -364,16 +324,25 @@ class hcaptcha extends captcha_abstract
 
 			if ($data->success === true)
 			{
+				$this->last_error = '';
 				$this->solved = true;
-				return false;
+				$this->confirm_code = $this->code;
+				return true;
 			}
 		}
 		catch (GuzzleException $ex)
 		{
-			return $this->language->lang('HCAPTCHA_REQUEST_EXCEPTION', $ex->getMessage());
+			$this->last_error = $this->language->lang('HCAPTCHA_REQUEST_EXCEPTION', $ex->getMessage());
+			$this->solved = false;
+			$this->confirm_code = '';
+			return false;
 		};
 
-		return $this->language->lang('HCAPTCHA_INCORRECT');
+		// Must not get here
+		$this->last_error = $this->language->lang('HCAPTCHA_INCORRECT');
+		$this->solved = false;
+		$this->confirm_code = '';
+		return false;
 	}
 
 	/**

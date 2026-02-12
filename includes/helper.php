@@ -14,7 +14,7 @@ use phpbb\language\language;
 class helper
 {
 	/** @var language */
-	protected $language;
+	protected language $language;
 
 	/**
 	 * Helper constructor.

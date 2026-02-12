@@ -18,29 +18,49 @@ trait functional_test_case_trait
 
 	protected function init_hcaptcha()
 	{
+		$this->update_config([
+			'captcha_plugin' => 'alfredoramos.hcaptcha.captcha.hcaptcha',
+			'hcaptcha_key' => '10000000-ffff-ffff-ffff-000000000001',
+			'hcaptcha_secret' => '0x0000000000000000000000000000000000000000',
+			'old_captcha_plugin' => 'core.captcha.plugins.incomplete'
+		]);
+	}
+
+	private function update_config(array $data = [])
+	{
+		if (empty($data))
+		{
+			return;
+		}
+
 		$db = $this->get_db();
 		$db->sql_transaction('begin');
 
-		$config_ary = [
-			// hCaptcha
-			'captcha_plugin' => 'alfredoramos.hcaptcha.captcha.hcaptcha',
-			'hcaptcha_key' => '10000000-ffff-ffff-ffff-000000000001',
-			'hcaptcha_secret' => '0x0000000000000000000000000000000000000000'
-		];
-
-		foreach ($config_ary as $key => $value)
+		foreach ($data as $key => $value)
 		{
+			if (!is_string($key) || !is_string($value))
+			{
+				continue;
+			}
+
 			$key = trim($key);
 			$value = trim($value);
 
-			$sql = 'UPDATE ' . CONFIG_TABLE . '
-				SET ' . $db->sql_build_array('UPDATE', [
-				'config_value' => $value
-			]) . '
-				WHERE ' . $db->sql_build_array('UPDATE', [
-				'config_name' => $key
-			]);
+			if (empty($key) || empty($value))
+			{
+				continue;
+			}
 
+			$sql = 'UPDATE ' . CONFIG_TABLE . '
+			SET ' . $db->sql_build_array('UPDATE',
+				[
+					'config_value' => $value,
+					'is_dynamic' => 1 // Fix cache
+				]
+			) . '
+			WHERE ' . $db->sql_build_array('UPDATE',
+				['config_name' => $key]
+			);
 			$db->sql_query($sql);
 		}
 
