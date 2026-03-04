@@ -9,12 +9,34 @@
 
 namespace alfredoramos\hcaptcha\includes;
 
+use phpbb\config\config;
 use phpbb\language\language;
+use phpbb\template\template;
+use phpbb\captcha\factory as captcha_factory;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 class helper
 {
+	/** @var config */
+	protected $config;
+
 	/** @var language */
 	protected $language;
+
+	/** @var template */
+	protected $template;
+
+	/** @var captcha_factory */
+	protected $captcha_factory;
+
+	/** @var string */
+	public const SUPPORT_FAQ = 'https://www.phpbb.com/customise/db/extension/hcaptcha/faq';
+
+	/** @var string */
+	public const SUPPORT_URL = 'https://www.phpbb.com/customise/db/extension/hcaptcha/support';
+
+	/** @var string */
+	public const VENDOR_DONATE = 'https://alfredoramos.mx/donate/';
 
 	/**
 	 * Helper constructor.
@@ -23,9 +45,12 @@ class helper
 	 *
 	 * @param void
 	 */
-	public function __construct(language $language)
+	public function __construct(config $config, language $language, template $template, captcha_factory $captcha_factory)
 	{
+		$this->config = $config;
 		$this->language = $language;
+		$this->template = $template;
+		$this->captcha_factory = $captcha_factory;
 	}
 
 	/**
@@ -37,8 +62,12 @@ class helper
 	 *
 	 * @return bool
 	 */
-	public function validate(array &$fields = [], array &$filters = [], array &$errors = []): bool
+	public function validate(array &$fields = null, array &$filters = null, array &$errors = null): bool
 	{
+		$fields = $fields ?? [];
+		$filters = $filters ?? [];
+		$errors = $errors ?? [];
+
 		if (empty($fields) || empty($filters))
 		{
 			return false;
@@ -72,5 +101,33 @@ class helper
 
 		// Validation check
 		return empty($errors);
+	}
+
+	/**
+	 * Force captcha on login page.
+	 */
+	public function setup_login_captcha(): void
+	{
+		if ((int) $this->config->offsetGet('hcaptcha_force_login') !== 1)
+		{
+			return;
+		}
+
+		try
+		{
+			$captcha = $this->captcha_factory->get_instance('alfredoramos.hcaptcha.captcha.hcaptcha');
+
+			if (empty($captcha) || !$captcha->is_available())
+			{
+				return;
+			}
+
+			$captcha->init(CONFIRM_LOGIN);
+			$this->template->assign_vars(['CAPTCHA_TEMPLATE' => $captcha->get_template()]);
+		}
+		catch(ServiceNotFoundException $ex) // Just in case, must not get here
+		{
+			return;
+		}
 	}
 }

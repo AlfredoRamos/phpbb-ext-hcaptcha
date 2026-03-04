@@ -13,13 +13,12 @@
 		"Opera >= 30"
 	],
 	"scripts": {
-		"build-scss": "node .github/scripts/build-scss.js",
 		"build-css": "npx postcss 'build/package/**/css/!(*.min).css' --ext '.min.css' --base build/ --no-map -d build/",
 		"build-js": "node .github/scripts/build-js.js",
 		"build-templates": "node .github/scripts/build-templates.js",
-		"build": "npm run build-scss && npm run build-css && npm run build-js && npm run build-templates",
-		"build-dev": "npm run build && npm run lint-scss && npm run lint-css",
-		"lint-scss": "npx stylelint '**/*.scss' --fix",
+		"build": "npm run build-css && npm run build-js && npm run build-templates",
+		"build-dev": "npm run build && npm run lint-css",
+		"build-clean": "node .github/scripts/build-clean.js",
 		"lint-css": "npx stylelint '**/*.css' --fix"
 	},
 	"devDependencies": {
@@ -28,13 +27,9 @@
 		"glob": "^13.0.0",
 		"postcss": "^8.4.4",
 		"postcss-cli": "^11.0.0",
-		"postcss-import": "^16.0.0",
-		"postcss-scss": "^4.0.2",
 		"sass-embedded": "^1.83.1",
 		"stylelint": "^17.1.1",
-		"stylelint-config-standard-scss": "^17.0.0",
 		"stylelint-order": "^7.0.0",
-		"stylelint-scss": "^7.0.0",
 		"uglify-js": "^3.14.5"
 	}
 }

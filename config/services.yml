@@ -1,8 +1,18 @@
 services:
+    alfredoramos.hcaptcha.listener:
+        class: alfredoramos\hcaptcha\event\listener
+        arguments:
+            - '@alfredoramos.hcaptcha.helper'
+        tags:
+            - { name: event.listener }
+
     alfredoramos.hcaptcha.helper:
         class: alfredoramos\hcaptcha\includes\helper
         arguments:
+            - '@config'
             - '@language'
+            - '@template'
+            - '@captcha.factory'
 
     alfredoramos.hcaptcha.captcha.hcaptcha:
         class: alfredoramos\hcaptcha\captcha\plugins\hcaptcha

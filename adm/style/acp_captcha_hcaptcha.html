@@ -4,7 +4,7 @@
 
 <h1>{{ lang('ACP_VC_SETTINGS') }}</h1>
 <p>{{ lang('ACP_VC_SETTINGS_EXPLAIN') }}</p>
-<p>{{ lang('CAPTCHA_HCAPTCHA_EXPLAIN') }}</p>
+<p>{{ CAPTCHA_HCAPTCHA_EXPLAIN }}</p>
 
 {% if VALIDATION_ERRORS %}
 <div class="errorbox">
@@ -23,7 +23,7 @@
 				<br><span>{{ lang('HCAPTCHA_KEY_EXPLAIN') }}</span>
 			</dt>
 			<dd>
-				<input type="text" id="hcaptcha-key" name="hcaptcha_key" value="{{ HCAPTCHA_KEY }}" required="required" autocomplete="off" class="medium">
+				<input type="text" id="hcaptcha-key" name="hcaptcha_key" value="{{ HCAPTCHA_KEY }}" required="required" autocomplete="off" class="medium hcaptcha-field-secret">
 			</dd>
 		</dl>
 		<dl>
@@ -32,8 +32,8 @@
 				<br><span>{{ lang('HCAPTCHA_SECRET_EXPLAIN') }}</span>
 			</dt>
 			<dd>
-				<input type="password" id="hcaptcha-secret" name="hcaptcha_secret" value="{{ HCAPTCHA_SECRET }}" required="required" autocomplete="off" class="medium">
-				<span id="toggle-hcaptcha-secret" title="{{ lang('ACP_HCAPTCHA_TOGGLE_SECRET', lang('HCAPTCHA_SECRET'))|striptags|escape('html_attr') }}">
+				<input type="password" id="hcaptcha-secret" name="hcaptcha_secret" value="{{ HCAPTCHA_SECRET }}" required="required" autocomplete="off" class="medium hcaptcha-field-secret">
+				<span class="hcaptcha-btn hcaptcha-btn-icon hcaptcha-btn-toggle" title="{{ lang('ACP_HCAPTCHA_TOGGLE_SECRET', lang('HCAPTCHA_SECRET'))|striptags|escape('html_attr') }}">
 					<i class="icon acp-icon acp-icon-resync fa-eye fa-fw" aria-hidden="true"></i>
 				</span>
 			</dd>
@@ -68,6 +68,16 @@
 			</dd>
 		</dl>
 		{% endif %}
+		<dl>
+			<dt>
+				<label for="hcaptcha_force_login">{{ lang('HCAPTCHA_FORCE_LOGIN') ~ lang('COLON') }}</label>
+				<br><span>{{ lang('HCAPTCHA_FORCE_LOGIN_EXPLAIN') }}</span>
+			</dt>
+			<dd>
+				<label><input type="radio" id="hcaptcha_force_login" name="hcaptcha_force_login" value="1"{% if HCAPTCHA_FORCE_LOGIN %} checked="checked"{% endif %}> {{ lang('YES') }}</label>
+				<label><input type="radio" name="hcaptcha_force_login" value="0"{% if not HCAPTCHA_FORCE_LOGIN %} checked="checked"{% endif %}> {{ lang('NO') }}</label>
+			</dd>
+		</dl>
 	</fieldset>
 
 	<fieldset>

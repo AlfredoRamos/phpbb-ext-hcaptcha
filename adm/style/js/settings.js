@@ -31,16 +31,16 @@
 		});
 	}, 250);
 
-	document.body
-		.querySelector('#toggle-hcaptcha-secret')
-		?.addEventListener('click', (e) => {
-			const toggle = e.target.closest('#toggle-hcaptcha-secret');
+	document.body.querySelectorAll('.hcaptcha-btn-toggle').forEach((elem) => {
+		elem?.addEventListener('click', (e) => {
+			const toggle = e.target.closest('.hcaptcha-btn-toggle');
+			const container = toggle.parentElement;
 
-			if (!toggle) {
+			if (!toggle || !container) {
 				return;
 			}
 
-			const field = document.body.querySelector('#hcaptcha-secret');
+			const field = container.querySelector('.hcaptcha-field-secret');
 			const icon = toggle?.querySelector('.icon');
 
 			if (!field || !icon) {
@@ -52,6 +52,7 @@
 			icon.classList.toggle('fa-eye-slash', isHidden);
 			icon.classList.toggle('fa-eye', !isHidden);
 		});
+	});
 
 	document.body
 		.querySelectorAll('#hcaptcha-theme,#hcaptcha-size')
