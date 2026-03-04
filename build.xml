@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="hCaptcha Extension Builder"
-	description="Builds an extension.zip from a git repository" default="all">
+<project name="hCaptcha Extension Builder" description="Builds an extension.zip from a git repository" default="all">
 	<property name="env" value="production" />
 	<property name="vendor-name" value="alfredoramos" />
 	<property name="extension-name" value="hcaptcha" />
@@ -18,7 +17,6 @@
 	<target name="clean-package">
 		<echo msg="Cleaning files and directories" />
 
-		<delete dir="${dir}/scss" />
 		<delete dir="${dir}/tests" />
 		<delete dir="${dir}/node_modules" />
 		<delete dir="${dir}/.github" />
@@ -99,6 +97,9 @@
 			<fileset dir="${package-directory}/language">
 				<patternset>
 					<include name="**/*.php" />
+					<exclude name="**/en/**/*.php" />
+					<exclude name="**/es/**/*.php" />
+					<exclude name="**/es_x_tu/**/*.php" />
 				</patternset>
 			</fileset>
 		</foreach>
@@ -155,9 +156,7 @@
 		<if>
 			<equals arg1="${env}" arg2="production" />
 			<then>
-				<phingcall target="minify-assets">
-					<property name="dir" value="${package-directory}" />
-				</phingcall>
+				<phingcall target="minify-assets" />
 			</then>
 		</if>
 
@@ -180,7 +179,10 @@
 
 	<!-- Create the zip and tar ball -->
 	<target name="wrap-package">
-		<echo msg="Creating archives (${vendor-name}/${extension-name} ${version})" />
+		<echo msg="Cleaning build" />
+		<exec command="npm run build-clean" checkreturn="true" />
+
+		<echo msg="Creating archives (${vendor-name}/${extension-name} ${package-version})" />
 		<zip basedir="${build-directory}/package/" destfile="${destination-filename}.zip" />
 		<tar basedir="${build-directory}/package/" destfile="${destination-filename}.tar.gz"
 			compression="gzip" />

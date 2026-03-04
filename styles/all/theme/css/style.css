@@ -8,10 +8,12 @@
 .hcaptcha-error {
 	margin: 1rem auto;
 }
+
 .hcaptcha-container .h-captcha,
 .hcaptcha-error {
 	text-align: center;
 }
+
 .hcaptcha-error {
 	font-weight: bold;
 	padding: 1rem;

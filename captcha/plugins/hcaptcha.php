@@ -176,25 +176,32 @@ class hcaptcha extends captcha_abstract
 			'hcaptcha_key' => [
 				'filter' => FILTER_VALIDATE_REGEXP,
 				'options' => [
-					'regexp' => '#^[a-f0-9]{8}\-[a-f0-9]{4}\-[a-f0-9]{4}\-[a-f0-9]{4}\-[a-f0-9]{12}$#'
+					'regexp' => '#\A[a-f0-9]{8}\-[a-f0-9]{4}\-[a-f0-9]{4}\-[a-f0-9]{4}\-[a-f0-9]{12}\z#'
 				]
 			],
 			'hcaptcha_secret' => [
 				'filter' => FILTER_VALIDATE_REGEXP,
 				'options' => [
-					'regexp' => '#^(0x[a-fA-F0-9]{40}|ES_[a-fA-F0-9]{32})$#'
+					'regexp' => '#\A(0x[a-fA-F0-9]{40}|ES_[a-fA-F0-9]{32})\z#'
 				]
 			],
 			'hcaptcha_theme' => [
 				'filter' => FILTER_VALIDATE_REGEXP,
 				'options' => [
-					'regexp' => '#^(?:' . implode('|', $this->supported_values['theme']) . ')?$#'
+					'regexp' => '#\A(?:' . implode('|', $this->supported_values['theme']) . ')?\z#'
 				]
 			],
 			'hcaptcha_size' => [
 				'filter' => FILTER_VALIDATE_REGEXP,
 				'options' => [
-					'regexp' => '#^(?:' . implode('|', $this->supported_values['size']) . ')?$#'
+					'regexp' => '#\A(?:' . implode('|', $this->supported_values['size']) . ')?\z#'
+				]
+			],
+			'hcaptcha_force_login' => [
+				'filter' => FILTER_VALIDATE_INT,
+				'options' => [
+					'min_range' => 0,
+					'max_range' => 1
 				]
 			]
 		];
@@ -212,7 +219,8 @@ class hcaptcha extends captcha_abstract
 				'hcaptcha_key' => $this->request->variable('hcaptcha_key', ''),
 				'hcaptcha_secret' => $this->request->variable('hcaptcha_secret', ''),
 				'hcaptcha_theme' => $this->request->variable('hcaptcha_theme', $this->supported_values['theme'][0]),
-				'hcaptcha_size' => $this->request->variable('hcaptcha_size', $this->supported_values['size'][0])
+				'hcaptcha_size' => $this->request->variable('hcaptcha_size', $this->supported_values['size'][0]),
+				'hcaptcha_force_login' => $this->request->variable('hcaptcha_force_login', 1)
 			];
 
 			// Validation check
@@ -236,9 +244,17 @@ class hcaptcha extends captcha_abstract
 
 			'HCAPTCHA_KEY'		=> $this->config->offsetGet('hcaptcha_key'),
 			'HCAPTCHA_SECRET'	=> $this->config->offsetGet('hcaptcha_secret'),
+			'HCAPTCHA_FORCE_LOGIN' => (int) $this->config->offsetGet('hcaptcha_force_login') === 1,
 
 			'CAPTCHA_NAME'		=> $this->get_service_name(),
 			'CAPTCHA_PREVIEW'	=> $this->get_demo_template($id),
+
+			'CAPTCHA_HCAPTCHA_EXPLAIN' => $this->language->lang(
+				'CAPTCHA_HCAPTCHA_EXPLAIN',
+				$this->helper::SUPPORT_FAQ,
+				$this->helper::SUPPORT_URL,
+				$this->helper::VENDOR_DONATE
+			),
 
 			'S_HCAPTCHA_SETTINGS'	=> true
 		]);

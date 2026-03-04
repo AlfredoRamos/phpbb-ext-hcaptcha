@@ -23,26 +23,21 @@ hCaptcha displays a checkbox similar to reCAPTCHA, but offers enhanced privacy, 
 
 ### Preview
 
-[![Spambot countermeasures](https://i.imgur.com/R4RcI3Qb.png)](https://i.imgur.com/R4RcI3Q.png)
-[![hCapcha configuration button](https://i.imgur.com/C1eI18wb.png)](https://i.imgur.com/C1eI18w.png)
-[![hCaptcha configuration](https://i.imgur.com/EmYYpkZb.png)](https://i.imgur.com/EmYYpkZ.png)
-[![hCaptcha plugin selection](https://i.imgur.com/iEkJYkKb.png)](https://i.imgur.com/iEkJYkK.png)
-[![Board registration preview](https://i.imgur.com/gZ3BSDRb.png)](https://i.imgur.com/gZ3BSDR.png)
-[![Board registration solving captcha](https://i.imgur.com/GgPNhdub.png)](https://i.imgur.com/GgPNhdu.png)
-[![hCaptcha with alternative theme and size](https://i.imgur.com/GIJUXfDb.png)](https://i.imgur.com/GIJUXfD.png)
-[![Integration with Contact Admin extension](https://i.imgur.com/OodqnUob.png)](https://i.imgur.com/OodqnUo.png)
+See the [full blog post](https://alfredoramos.mx/hcaptcha-extension-for-phpbb/) for the screenshots gallery.
 
 *(Click to view in full size)*
 
 ### Requirements
 
-- PHP 7.4.0 or greater
+- PHP 8.1.0 or greater
 - phpBB 3.3 or greater
 - hCaptcha site key and account secret key
 
 ### Support
 
-- [**Download page**](https://github.com/AlfredoRamos/phpbb-ext-hcaptcha/releases)
+- [**Download page**](https://www.phpbb.com/customise/db/extension/hcaptcha/)
+- [FAQ](https://www.phpbb.com/customise/db/extension/hcaptcha/faq)
+- [Support area](https://www.phpbb.com/customise/db/extension/hcaptcha/support)
 - [GitHub issues](https://github.com/AlfredoRamos/phpbb-ext-hcaptcha/issues)
 - [Crowdin translations](https://crowdin.com/project/phpbb-ext-hcaptcha)
 
@@ -56,8 +51,8 @@ If you like or found my work useful and want to show some appreciation, you can 
 
 ### Installation
 
-- Download the [latest release](https://github.com/AlfredoRamos/phpbb-ext-hcaptcha/releases)
-- Decompress the `*.zip` or `*.tar.gz` file
+- Download the [latest release](https://www.phpbb.com/customise/db/extension/hcaptcha/)
+- Decompress the `*.zip` file
 - Copy the files and directories inside `{PHPBB_ROOT}/ext/alfredoramos/hcaptcha/`
 - Go to your `Administration Control Panel` > `Customize` > `Manage extensions`
 - Click on `Enable` and confirm
