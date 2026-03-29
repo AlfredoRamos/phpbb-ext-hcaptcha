@@ -25,7 +25,7 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, [
 	'CAPTCHA_HCAPTCHA' => 'hCaptcha',
-	'CAPTCHA_HCAPTCHA_EXPLAIN' => 'Weitere Informationen finden Sie in der <a href="https://www.phpbb.com/customise/db/extension/hcaptcha/faq" rel="external nofollow noreferrer noopener" target="_blank"><strong>FAQ</strong></a>. Wenn Sie Hilfe benötigen, besuchen Sie bitte den <a href="https://www.phpbb.com/customise/db/extension/hcaptcha/support" rel="external nofollow noreferrer noopener" target="_blank"><strong>Support</strong></a>-Bereich.',
+	'CAPTCHA_HCAPTCHA_EXPLAIN' => '<p>Weitere Informationen finden Sie in den <a href="%1$s" rel="external nofollow noreferrer noopener" target="_blank"><strong>FAQ</strong></a>. Wenn Sie Hilfe benötigen, besuchen Sie bitte den Bereich <a href="%2$s" rel="external nofollow noreferrer noopener" target="_blank"><strong>Support</strong></a>.</p><p>Wenn Ihnen diese Erweiterung gefällt oder Sie sie nützlich finden und Ihre Wertschätzung zeigen möchten, können Sie deren Entwicklung unterstützen, indem Sie <a href="%3$s" rel="external nofollow noreferrer noopener" target="_blank"><strong>eine Spende geben</strong></a>.</p>',
 	'HCAPTCHA_KEY' => 'Sitekey',
 	'HCAPTCHA_KEY_EXPLAIN' => 'Der Sitekey, der auf hCaptcha für Ihre Domain generiert wurde.',
 	'HCAPTCHA_SECRET' => 'Geheimer Schlüssel',
@@ -38,6 +38,8 @@ $lang = array_merge($lang, [
 	'HCAPTCHA_SIZE_EXPLAIN' => 'Die Größe des hCaptcha-Widgets.',
 	'HCAPTCHA_SIZE_NORMAL' => 'Normal',
 	'HCAPTCHA_SIZE_COMPACT' => 'Kompakt',
+	'HCAPTCHA_FORCE_LOGIN' => 'Spambot-Gegenmaßnahmen bei Anmeldungen erzwingen',
+	'HCAPTCHA_FORCE_LOGIN_EXPLAIN' => 'Erfordert, dass Benutzer immer die Anti-Spambot-Aufgabe erfüllen, um automatisierte Anmeldungen zu verhindern.',
 	'HCAPTCHA_NOT_AVAILABLE' => 'Um hCaptcha nutzen zu können, müssen Sie ein Konto bei <a href="https://www.hcaptcha.com/" rel="external nofollow noreferrer noopener" target="_blank">www.hcaptcha.com</a> erstellen.',
 	'HCAPTCHA_INCORRECT' => 'Die von Ihnen eingegebene Lösung war falsch.',
 	'HCAPTCHA_NOSCRIPT' => 'Bitte aktivieren Sie JavaScript in Ihrem Browser, um die Challenge zu laden.',
