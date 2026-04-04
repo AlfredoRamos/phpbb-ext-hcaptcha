@@ -25,7 +25,7 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, [
 	'CAPTCHA_HCAPTCHA' => 'hCaptcha',
-	'CAPTCHA_HCAPTCHA_EXPLAIN' => 'Podrobnosti najdete v <a href="https://www.phpbb.com/customise/db/extension/hcaptcha/faq" rel="external nofollow noreferrer noopener" target="_blank"><strong>často kladených otázkách</strong></a>. Pokud potebujete pomoc, navštivte sekci <a href="https://www.phpbb.com/customise/db/extension/hcaptcha/support" rel="external nofollow noreferrer noopener" target="_blank"><strong>Support</strong></a>.',
+	'CAPTCHA_HCAPTCHA_EXPLAIN' => '<p>Consult the <a href="%1$s" rel="external nofollow noreferrer noopener" target="_blank"><strong>FAQ</strong></a> for more information. If you require assistance, please visit the <a href="%2$s" rel="external nofollow noreferrer noopener" target="_blank"><strong>Support</strong></a> section.</p><p>If you like or found this extension useful and want to show some appreciation, you can consider supporting its development by <a href="%3$s" rel="external nofollow noreferrer noopener" target="_blank"><strong>giving a donation</strong></a>.</p>',
 	'HCAPTCHA_KEY' => 'Klíč webu',
 	'HCAPTCHA_KEY_EXPLAIN' => 'Klíč vygenerovaný od hCaptcha pro vaši doménu.',
 	'HCAPTCHA_SECRET' => 'Tajný klíč',
@@ -38,6 +38,8 @@ $lang = array_merge($lang, [
 	'HCAPTCHA_SIZE_EXPLAIN' => 'Velikost widgetu hCaptcha.',
 	'HCAPTCHA_SIZE_NORMAL' => 'Normální',
 	'HCAPTCHA_SIZE_COMPACT' => 'Kompaktní',
+	'HCAPTCHA_FORCE_LOGIN' => 'Force spambot countermeasures in logins',
+	'HCAPTCHA_FORCE_LOGIN_EXPLAIN' => 'Requires users to always pass the anti-spambot task to help prevent automated logins.',
 	'HCAPTCHA_NOT_AVAILABLE' => 'Pro používání služby hCaptcha si nejprve vytvořte účet na <a href="https://www.hcaptcha.com/" rel="external nofollow noreferrer noopener" target="_blank">www.hcaptcha.com</a>.',
 	'HCAPTCHA_INCORRECT' => 'Zadali jste nesprávné řešení.',
 	'HCAPTCHA_NOSCRIPT' => 'Povolte ve svém prohlížeči JavaScript pro načtení hCaptcha.',

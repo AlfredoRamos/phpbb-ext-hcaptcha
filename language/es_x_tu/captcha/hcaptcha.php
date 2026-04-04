@@ -25,7 +25,7 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, [
 	'CAPTCHA_HCAPTCHA' => 'hCaptcha',
-	'CAPTCHA_HCAPTCHA_EXPLAIN' => 'Consulta las <a href="https://www.phpbb.com/customise/db/extension/hcaptcha/faq" rel="external nofollow noreferrer noopener" target="_blank"><strong>Preguntas Frecuentes</strong></a> para obtener más información. Si requieres de ayuda, por favor visita la sección de <a href="https://www.phpbb.com/customise/db/extension/hcaptcha/support" rel="external nofollow noreferrer noopener" target="_blank"><strong>Soporte</strong></a>.',
+	'CAPTCHA_HCAPTCHA_EXPLAIN' => '<p>Consult the <a href="%1$s" rel="external nofollow noreferrer noopener" target="_blank"><strong>FAQ</strong></a> for more information. If you require assistance, please visit the <a href="%2$s" rel="external nofollow noreferrer noopener" target="_blank"><strong>Support</strong></a> section.</p><p>If you like or found this extension useful and want to show some appreciation, you can consider supporting its development by <a href="%3$s" rel="external nofollow noreferrer noopener" target="_blank"><strong>giving a donation</strong></a>.</p>',
 	'HCAPTCHA_KEY' => 'Clave del sitio',
 	'HCAPTCHA_KEY_EXPLAIN' => 'La clave del sitio generada en hCaptcha para tu dominio.',
 	'HCAPTCHA_SECRET' => 'Clave secreta',
@@ -38,6 +38,8 @@ $lang = array_merge($lang, [
 	'HCAPTCHA_SIZE_EXPLAIN' => 'El tamaño del widget de hCapcha.',
 	'HCAPTCHA_SIZE_NORMAL' => 'Normal',
 	'HCAPTCHA_SIZE_COMPACT' => 'Compacto',
+	'HCAPTCHA_FORCE_LOGIN' => 'Force spambot countermeasures in logins',
+	'HCAPTCHA_FORCE_LOGIN_EXPLAIN' => 'Requires users to always pass the anti-spambot task to help prevent automated logins.',
 	'HCAPTCHA_NOT_AVAILABLE' => 'Para poder utilizar hCaptcha, debes crear una cuenta en <a href="https://www.hcaptcha.com/" rel="external nofollow noreferrer noopener" target="_blank">www.hcaptcha.com</a>.',
 	'HCAPTCHA_INCORRECT' => 'La solución que proporcionaste es incorrecta.',
 	'HCAPTCHA_NOSCRIPT' => 'Por favor, habilita JavaScript en tu navegador web para cargar el desafío.',
