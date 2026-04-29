@@ -1,6 +1,7 @@
 build/
 vendor/
 node_modules/
+.crowdin/
 composer.lock
 .phpunit.result.cache
 *.tmp
