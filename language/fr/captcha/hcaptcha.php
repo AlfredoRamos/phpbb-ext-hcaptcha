@@ -38,6 +38,8 @@ $lang = array_merge($lang, [
 	'HCAPTCHA_SIZE_EXPLAIN' => 'Taille du widget hCaptcha.',
 	'HCAPTCHA_SIZE_NORMAL' => 'Normale',
 	'HCAPTCHA_SIZE_COMPACT' => 'Compacte',
+	'HCAPTCHA_FORCE_LOGIN' => 'Force spambot countermeasures in logins',
+	'HCAPTCHA_FORCE_LOGIN_EXPLAIN' => 'Requires users to always pass the anti-spambot task to help prevent automated logins.',
 	'HCAPTCHA_NOT_AVAILABLE' => 'Pour utiliser hCaptcha, vous devez créer un compte sur <a href="https://www.hcaptcha.com/" rel="external nofollow noreferrer noopener" title="S’ouvre dans un nouvel onglet" target="_blank">www.hcaptcha.com</a>.',
 	'HCAPTCHA_INCORRECT' => 'La solution que vous avez indiquée est incorrecte.',
 	'HCAPTCHA_NOSCRIPT' => 'Veuillez activer JavaScript dans votre navigateur pour charger le test.',
